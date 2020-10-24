@@ -13,3 +13,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_Registration_clicked()
+{
+    ui->FormsAndMainMenu->setCurrentIndex(1);
+}
+
+void MainWindow::on_Logining_clicked()
+{
+    ui->FormsAndMainMenu->setCurrentIndex(0);
+}
