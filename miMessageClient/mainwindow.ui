@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>624</height>
+    <width>811</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -312,11 +312,14 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>265</width>
-              <height>586</height>
+              <width>255</width>
+              <height>550</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <layout class="QVBoxLayout" name="ChatButtonsList"/>
+             </item>
              <item>
               <spacer name="verticalSpacer_5">
                <property name="orientation">
