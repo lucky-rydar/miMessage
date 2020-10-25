@@ -22,3 +22,8 @@ void MainWindow::on_Logining_clicked()
 {
     ui->FormsAndMainMenu->setCurrentIndex(0);
 }
+
+void MainWindow::on_Send_clicked()
+{
+
+}

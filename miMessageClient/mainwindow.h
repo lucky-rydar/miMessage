@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtCore>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,6 +21,8 @@ private slots:
     void on_Registration_clicked();
 
     void on_Logining_clicked();
+
+    void on_Send_clicked();
 
 private:
     Ui::MainWindow *ui;
