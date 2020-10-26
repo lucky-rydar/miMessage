@@ -4,6 +4,9 @@ Server::Server(QObject *parent) : QObject(parent)
 {
     this->tcpServer = new QTcpServer(parent);
     this->dbController = new DatabaseController(parent);
+    this->clientsList = QVector<QTcpSocket*>();
+
+    connect(tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
 
     //TODO: connect all signals of QTcpServer
 }
@@ -19,4 +22,13 @@ void Server::run()
     qInfo("Server started successfully...");
 
     //TODO: do something if everything is fine
+}
+
+void Server::newConnection()
+{
+    QTcpSocket *sock = tcpServer->nextPendingConnection();
+    clientsList.push_back(sock);
+    connect(sock, &QTcpSocket::disconnected, [=](){ this->clientsList.removeOne(sock); });
+
+    // connect readyRead with reading
 }

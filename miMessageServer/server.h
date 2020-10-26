@@ -17,6 +17,9 @@ public:
 private:
     QTcpServer *tcpServer;
     DatabaseController *dbController;
+    QVector<QTcpSocket*> clientsList;
+
+    void newConnection();
 signals:
 
 };
