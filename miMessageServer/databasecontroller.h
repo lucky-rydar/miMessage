@@ -11,7 +11,7 @@ public:
     explicit DatabaseController(QObject *parent = nullptr);
 
     void addUser(QString username, QString hashedPassword);
-    void userExist(QString username);
+    bool userExist(QString username);
 private:
     QSqlDatabase connection;
 signals:
