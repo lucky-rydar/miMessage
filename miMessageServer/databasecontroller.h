@@ -2,6 +2,7 @@
 #define DATABASECONTROLLER_H
 
 #include <QObject>
+#include <QtSql/QtSql>
 
 class DatabaseController : public QObject
 {
@@ -9,8 +10,10 @@ class DatabaseController : public QObject
 public:
     explicit DatabaseController(QObject *parent = nullptr);
 
+    void addUser(QString username, QString hashedPassword);
+    void userExist(QString username);
 private:
-
+    QSqlDatabase connection;
 signals:
 
 };

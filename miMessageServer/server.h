@@ -5,8 +5,6 @@
 #include <QtNetwork/QtNetwork>
 #include <databasecontroller.h>
 
-using namespace std;
-
 class Server : public QObject
 {
     Q_OBJECT
