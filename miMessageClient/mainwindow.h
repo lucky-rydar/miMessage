@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtCore>
+#include <client.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +25,10 @@ private slots:
 
     void on_Send_clicked();
 
+    void on_RegisterUserButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    Client *client;
 };
 #endif // MAINWINDOW_H

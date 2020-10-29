@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="FormsAndMainMenu">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="LoginingForm">
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -223,7 +223,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_5"/>
+                 <widget class="QLineEdit" name="regUsername"/>
                 </item>
                </layout>
               </item>
@@ -237,7 +237,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_6"/>
+                 <widget class="QLineEdit" name="regPassword1">
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -251,14 +255,25 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_7"/>
+                 <widget class="QLineEdit" name="regPassword2">
+                  <property name="echoMode">
+                   <enum>QLineEdit::Password</enum>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_3">
+               <widget class="QPushButton" name="RegisterUserButton">
                 <property name="text">
                  <string>Register</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="regInfoLabel">
+                <property name="text">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -303,7 +318,7 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
              <widget class="QScrollArea" name="scrollArea">

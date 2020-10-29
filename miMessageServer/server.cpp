@@ -30,5 +30,6 @@ void Server::newConnection()
     clientsList.push_back(sock);
     connect(sock, &QTcpSocket::disconnected, [=](){ this->clientsList.removeOne(sock); });
 
+    qInfo() << "connected";
     // connect readyRead with reading
 }
