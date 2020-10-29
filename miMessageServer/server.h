@@ -18,6 +18,7 @@ private:
     QVector<QTcpSocket*> clientsList;
 
     void newConnection();
+    void onNewClientMessage(int sockIndex);
 signals:
 
 };

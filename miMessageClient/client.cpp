@@ -16,12 +16,15 @@ void Client::registerUser(QString username, QString password)
     toSend["password"] = password;
 
     serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::onServerMessasge()
 {
     QJsonDocument doc = QJsonDocument::fromJson(serverConnection->readAll());
     QJsonObject obj = doc.object();
+
+    qDebug() << obj;
 
     if(obj["message-type"] == "reg-status")
         emit Registered(obj["registered"].toBool());

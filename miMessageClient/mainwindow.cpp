@@ -56,12 +56,16 @@ void MainWindow::on_RegisterUserButton_clicked()
         ui->regInfoLabel->setPalette(palette);
 
         client->registerUser(ui->regUsername->text(), ui->regPassword1->text());
+
         connect(client, &Client::Registered, [=](bool isRegistered){
+            qDebug() << isRegistered;
             if(isRegistered)
             {
                 ui->regInfoLabel->setText("Registered successful!");
-                QThread::sleep(1000);
-                on_Registration_clicked();
+                ui->regPassword1->clear();
+                ui->regPassword2->clear();
+                ui->regUsername->clear();
+                ui->FormsAndMainMenu->setCurrentIndex(0);
             }
             else
             {
@@ -70,8 +74,6 @@ void MainWindow::on_RegisterUserButton_clicked()
                 ui->regInfoLabel->setPalette(palette);
                 ui->regInfoLabel->setText("Cant register you");
             }
-
-
         });
     }
 
