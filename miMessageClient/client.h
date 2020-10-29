@@ -17,8 +17,11 @@ public:
 private:
     QTcpSocket *serverConnection;
 
+    QString username;// these two variables must
+    QString password;// be filled during logining
 signals:
-    void Registered();
+    void Registered(bool isRegistered);
+    void Logined(bool isLogined);
 };
 
 #endif // CLIENT_H

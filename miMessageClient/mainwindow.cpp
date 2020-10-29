@@ -56,10 +56,22 @@ void MainWindow::on_RegisterUserButton_clicked()
         ui->regInfoLabel->setPalette(palette);
 
         client->registerUser(ui->regUsername->text(), ui->regPassword1->text());
-        connect(client, &Client::Registered, [=](){
-            ui->regInfoLabel->setText("Registered successful!");
-            QThread::sleep(1000);
-            on_Registration_clicked();
+        connect(client, &Client::Registered, [=](bool isRegistered){
+            if(isRegistered)
+            {
+                ui->regInfoLabel->setText("Registered successful!");
+                QThread::sleep(1000);
+                on_Registration_clicked();
+            }
+            else
+            {
+                QPalette palette = ui->regInfoLabel->palette();
+                palette.setColor(ui->regInfoLabel->foregroundRole(), Qt::red);
+                ui->regInfoLabel->setPalette(palette);
+                ui->regInfoLabel->setText("Cant register you");
+            }
+
+
         });
     }
 

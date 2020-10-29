@@ -20,5 +20,12 @@ void Client::registerUser(QString username, QString password)
 
 void Client::onServerMessasge()
 {
+    QJsonDocument doc = QJsonDocument::fromJson(serverConnection->readAll());
+    QJsonObject obj = doc.object();
+
+    if(obj["message-type"] == "reg-status")
+        emit Registered(obj["registered"].toBool());
+    else if(obj["message-type"] == "login-status")
+        emit Logined(obj["logined"].toBool());
 
 }
