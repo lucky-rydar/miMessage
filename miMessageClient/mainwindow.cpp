@@ -79,3 +79,43 @@ void MainWindow::on_RegisterUserButton_clicked()
 
 
 }
+
+void MainWindow::on_LoginUserButton_clicked()
+{
+    if(ui->logUsername->text().isEmpty() || ui->logPassword->text().isEmpty())
+    {
+        ui->logInfoLabel->setText("Username or password line is empty.");
+        QPalette palette = ui->logInfoLabel->palette();
+        palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
+        ui->logInfoLabel->setPalette(palette);
+    }
+    else
+    {
+        client->loginUser(ui->logUsername->text(), ui->logPassword->text());
+
+        QPalette palette = ui->logInfoLabel->palette();
+        ui->logInfoLabel->setText("Trying to login you");
+        palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
+        ui->logInfoLabel->setPalette(palette);
+
+        connect(client, &Client::Logined, [=](bool isLogined){
+            QPalette palette = ui->logInfoLabel->palette();
+            if(isLogined)
+            {
+                ui->logInfoLabel->setText("You are logined successfully");
+                palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
+                ui->logPassword->clear();
+                ui->logUsername->clear();
+                ui->FormsAndMainMenu->setCurrentIndex(2);
+            }
+            else
+            {
+                ui->logInfoLabel->setText("Wrong username or password");
+                palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
+            }
+            ui->logInfoLabel->setPalette(palette);
+        });
+    }
+
+
+}

@@ -12,6 +12,7 @@ class Client : public QObject
 public:
     explicit Client(QObject *parent = nullptr);
     void registerUser(QString username, QString password);
+    void loginUser(QString username, QString password);
 
     void onServerMessasge();
 private:

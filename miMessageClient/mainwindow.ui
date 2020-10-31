@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="FormsAndMainMenu">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="LoginingForm">
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -90,7 +90,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit"/>
+                   <widget class="QLineEdit" name="logUsername"/>
                   </item>
                  </layout>
                 </item>
@@ -104,7 +104,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QLineEdit" name="lineEdit_2">
+                   <widget class="QLineEdit" name="logPassword">
                     <property name="echoMode">
                      <enum>QLineEdit::Password</enum>
                     </property>
@@ -113,9 +113,16 @@
                  </layout>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="LoginUserButton">
                   <property name="text">
                    <string>Login</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="logInfoLabel">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -330,8 +337,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>159</width>
-                 <height>519</height>
+                 <width>38</width>
+                 <height>26</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_7">

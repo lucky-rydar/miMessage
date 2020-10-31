@@ -19,6 +19,17 @@ void Client::registerUser(QString username, QString password)
     serverConnection->flush();
 }
 
+void Client::loginUser(QString username, QString password)
+{
+    QJsonObject toSend;
+    toSend["message-type"] = "logining";
+    toSend["username"] = username;
+    toSend["password"] = password;
+
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
+}
+
 void Client::onServerMessasge()
 {
     QJsonDocument doc = QJsonDocument::fromJson(serverConnection->readAll());

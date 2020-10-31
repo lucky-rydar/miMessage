@@ -27,6 +27,8 @@ private slots:
 
     void on_RegisterUserButton_clicked();
 
+    void on_LoginUserButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Client *client;

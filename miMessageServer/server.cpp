@@ -62,6 +62,18 @@ void Server::onNewClientMessage(int sockIndex)
         userSock->write(QJsonDocument(toSend).toJson());
         userSock->flush();
     }
+    else if(clientMessage["message-type"] == "logining")
+    {
+        toSend["message-type"] = "login-status";
+        toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
+        //TODO: send the list of all chats too
+
+        qDebug() << toSend;
+        userSock->write(QJsonDocument(toSend).toJson());
+        userSock->flush();
+
+
+    }
 
 
 
