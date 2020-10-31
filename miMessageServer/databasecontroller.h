@@ -12,6 +12,7 @@ public:
 
     void addUser(QString username, QString hashedPassword);
     bool userExist(QString username);
+    bool isRegistered(QString username, QString hashedPassword);
 private:
     QSqlDatabase connection;
 signals:

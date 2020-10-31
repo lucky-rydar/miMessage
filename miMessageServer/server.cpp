@@ -55,13 +55,14 @@ void Server::onNewClientMessage(int sockIndex)
             toSend["registered"] = false;
         else
         {
-            dbController->addUser(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5));
+            dbController->addUser(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
             toSend["registered"] = true;
         }
         qDebug() << toSend;
         userSock->write(QJsonDocument(toSend).toJson());
         userSock->flush();
     }
+
 
 
 }

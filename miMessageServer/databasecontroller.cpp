@@ -22,3 +22,8 @@ bool DatabaseController::userExist(QString username)
 {
     return QSqlQuery("SELECT * FROM users WHERE username = '" + username + "';", connection).next();
 }
+
+bool DatabaseController::isRegistered(QString username, QString hashedPassword)
+{
+    return QSqlQuery("SELECT * FROM users WHERE username = '" + username + "' AND hashed_password = '" + hashedPassword + "';", connection).next();
+}
