@@ -11,7 +11,8 @@ CONFIG -= app_bundle
 SOURCES += \
         databasecontroller.cpp \
         main.cpp \
-        server.cpp
+        server.cpp \
+        user.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -20,4 +21,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     databasecontroller.h \
-    server.h
+    server.h \
+    user.h
