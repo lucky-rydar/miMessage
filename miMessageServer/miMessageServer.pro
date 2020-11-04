@@ -11,6 +11,7 @@ CONFIG -= app_bundle
 SOURCES += \
         databasecontroller.cpp \
         group.cpp \
+        groupmember.cpp \
         main.cpp \
         message.cpp \
         server.cpp \
@@ -24,6 +25,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     databasecontroller.h \
     group.h \
+    groupmember.h \
     message.h \
     server.h \
     user.h
