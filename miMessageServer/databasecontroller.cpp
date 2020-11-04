@@ -19,15 +19,15 @@ DatabaseController::DatabaseController(QObject *parent) : QObject(parent)
 void DatabaseController::addUser(QString username, QString hashedPassword)
 {
     if(!userExist(username))
-        QSqlQuery("INSERT INTO users(username, hashed_password) VALUES(\'" + username + "\', \'" + hashedPassword + "\')", connection);
+        QSqlQuery("INSERT INTO User(username, hashed_password) VALUES(\'" + username + "\', \'" + hashedPassword + "\')", connection);
 }
 
 bool DatabaseController::userExist(QString username)
 {
-    return QSqlQuery("SELECT * FROM users WHERE username = '" + username + "';", connection).next();
+    return QSqlQuery("SELECT * FROM User WHERE username = '" + username + "';", connection).next();
 }
 
 bool DatabaseController::isRegistered(QString username, QString hashedPassword)
 {
-    return QSqlQuery("SELECT * FROM users WHERE username = '" + username + "' AND hashed_password = '" + hashedPassword + "';", connection).next();
+    return QSqlQuery("SELECT * FROM User WHERE username = '" + username + "' AND hashed_password = '" + hashedPassword + "';", connection).next();
 }
