@@ -16,7 +16,7 @@ public:
 
     void onServerMessasge();
 private:
-    QTcpSocket *serverConnection;
+    QUdpSocket *serverConnection;
 
     QString username;// these two variables must
     QString password;// be filled during logining

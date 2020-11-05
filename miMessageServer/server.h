@@ -13,12 +13,10 @@ public:
     void run();
 
 private:
-    QTcpServer *tcpServer;
+    QUdpSocket* udpServer;
     DatabaseController *dbController;
-    QVector<QTcpSocket*> clientsList;
 
-    void newConnection();
-    void onNewClientMessage(int sockIndex);
+    void onNewClientMessage();
 signals:
 
 };

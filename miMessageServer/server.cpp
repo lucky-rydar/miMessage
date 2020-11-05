@@ -2,18 +2,15 @@
 
 Server::Server(QObject *parent) : QObject(parent)
 {
-    this->tcpServer = new QTcpServer(parent);
+    this->udpServer = new QUdpSocket(this);
     this->dbController = new DatabaseController(parent);
-    this->clientsList = QVector<QTcpSocket*>();
 
-    connect(tcpServer, &QTcpServer::newConnection, this, &Server::newConnection);
-
-    //TODO: connect all signals of QTcpServer
+    connect(udpServer, &QUdpSocket::readyRead, this, &Server::onNewClientMessage);
 }
 
 void Server::run()
 {
-    if(!tcpServer->listen(QHostAddress::Any, 333))
+    if(!udpServer->bind(QHostAddress::Any, 333))
     {
         qCritical("Cant run the server");
         return;
@@ -24,56 +21,46 @@ void Server::run()
     //TODO: do something if everything is fine
 }
 
-void Server::newConnection()
+void Server::onNewClientMessage()
 {
-    QTcpSocket *sock = tcpServer->nextPendingConnection();
-    if(!clientsList.contains(sock))
-        clientsList.push_back(sock);
-
-    connect(sock, &QTcpSocket::disconnected, [=](){ this->clientsList.removeOne(sock); });
-
-    connect(sock, &QTcpSocket::readyRead, [=](){
-        onNewClientMessage(clientsList.indexOf(sock));
-    });
-
-    qInfo() << "connected";
-    // connect readyRead with reading
-}
-
-void Server::onNewClientMessage(int sockIndex)
-{
-    QTcpSocket* userSock = clientsList.at(sockIndex);
-    QJsonObject clientMessage = QJsonDocument::fromJson(userSock->readAll()).object();
-    QJsonObject toSend;
-
-    qDebug() << "new Message";
-
-    if(clientMessage["message-type"] == "registration")
+    while(udpServer->hasPendingDatagrams())
     {
-        toSend["message-type"] = "reg-status";
-        if(dbController->userExist(clientMessage["username"].toString()))
-            toSend["registered"] = false;
-        else
+        QByteArray buff;
+        buff.resize(udpServer->pendingDatagramSize());
+        QHostAddress senderIP;
+        quint16 senderPort;
+        udpServer->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);
+
+        QJsonObject clientMessage = QJsonDocument::fromJson(buff).object();
+        QJsonObject toSend;
+
+        qDebug() << "new Message";
+
+        if(clientMessage["message-type"] == "registration")
         {
-            dbController->addUser(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
-            toSend["registered"] = true;
+            toSend["message-type"] = "reg-status";
+            if(dbController->userExist(clientMessage["username"].toString()))
+                toSend["registered"] = false;
+            else
+            {
+                dbController->addUser(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
+                toSend["registered"] = true;
+            }
+            qDebug() << toSend;
         }
-        qDebug() << toSend;
-        userSock->write(QJsonDocument(toSend).toJson());
-        userSock->flush();
-    }
-    else if(clientMessage["message-type"] == "logining")
-    {
-        toSend["message-type"] = "login-status";
-        toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
-        //TODO: send the list of all chats too
+        else if(clientMessage["message-type"] == "logining")
+        {
+            toSend["message-type"] = "login-status";
+            toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
+            //TODO: add the list of all chats too
 
-        qDebug() << toSend;
-        userSock->write(QJsonDocument(toSend).toJson());
-        userSock->flush();
+            qDebug() << toSend;
+        }
 
+        udpServer->writeDatagram(QJsonDocument(toSend).toJson(), senderIP, 444);
 
     }
+
 
 
 

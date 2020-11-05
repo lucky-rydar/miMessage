@@ -2,8 +2,8 @@
 
 Client::Client(QObject *parent) : QObject(parent)
 {
-    this->serverConnection = new QTcpSocket(this);
-    serverConnection->connectToHost(QHostAddress("127.0.0.1"), 333);
+    this->serverConnection = new QUdpSocket(this);
+    serverConnection->bind(QHostAddress::Any, 444);
 
     connect(serverConnection, &QTcpSocket::readyRead, this, &Client::onServerMessasge);
 }
@@ -15,8 +15,7 @@ void Client::registerUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->write(QJsonDocument(toSend).toJson());
-    serverConnection->flush();
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
 }
 
 void Client::loginUser(QString username, QString password)
@@ -26,20 +25,31 @@ void Client::loginUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->write(QJsonDocument(toSend).toJson());
-    serverConnection->flush();
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
 }
 
 void Client::onServerMessasge()
 {
-    QJsonDocument doc = QJsonDocument::fromJson(serverConnection->readAll());
-    QJsonObject obj = doc.object();
+    while(serverConnection->hasPendingDatagrams())
+    {
+        QByteArray buff;
+        buff.resize(serverConnection->pendingDatagramSize());
+        QHostAddress senderIP;
+        quint16 senderPort;
+        serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);
 
-    qDebug() << obj;
+        qDebug() << buff;
 
-    if(obj["message-type"] == "reg-status")
-        emit Registered(obj["registered"].toBool());
-    else if(obj["message-type"] == "login-status")
-        emit Logined(obj["logined"].toBool());
+        QJsonDocument doc = QJsonDocument::fromJson(buff);
+        QJsonObject obj = doc.object();
+
+        qDebug() << obj;
+
+        if(obj["message-type"] == "reg-status")
+            emit Registered(obj["registered"].toBool());
+        else if(obj["message-type"] == "login-status")
+            emit Logined(obj["logined"].toBool());
+    }
+
 
 }
