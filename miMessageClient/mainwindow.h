@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <client.h>
+#include <addchatform.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,8 +30,12 @@ private slots:
 
     void on_LoginUserButton_clicked();
 
+    void on_AddChat_clicked();
+
 private:
     Ui::MainWindow *ui;
     Client *client;
+
+    QString *usernameToAdd;
 };
 #endif // MAINWINDOW_H

@@ -7,11 +7,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     client = new Client(this);
+    usernameToAdd = new QString();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete usernameToAdd;
 }
 
 void MainWindow::on_Registration_clicked()
@@ -118,4 +120,10 @@ void MainWindow::on_LoginUserButton_clicked()
     }
 
 
+}
+
+void MainWindow::on_AddChat_clicked()
+{
+    auto chatForm = new AddChatForm(usernameToAdd);
+    chatForm->show();
 }

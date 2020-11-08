@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="FormsAndMainMenu">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="LoginingForm">
        <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -337,8 +337,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>38</width>
-                 <height>26</height>
+                 <width>161</width>
+                 <height>521</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_7">
