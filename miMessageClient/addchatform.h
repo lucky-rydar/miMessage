@@ -2,6 +2,7 @@
 #define ADDCHATFORM_H
 
 #include <QDialog>
+#include <client.h>
 
 namespace Ui {
 class AddChatForm;
@@ -12,15 +13,18 @@ class AddChatForm : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddChatForm(QString* usernameToAdd = nullptr, QWidget *parent = nullptr);
+    explicit AddChatForm(Client *client, QWidget *parent = nullptr);
     ~AddChatForm();
 
 private slots:
     void on_createChat_clicked();
 
+signals:
+    void newChat(QString chatName);
+
 private:
     Ui::AddChatForm *ui;
-    QString *usernameToAdd;
+    Client *client;
 };
 
 #endif // ADDCHATFORM_H

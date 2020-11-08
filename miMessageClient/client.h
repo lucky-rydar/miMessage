@@ -13,16 +13,19 @@ public:
     explicit Client(QObject *parent = nullptr);
     void registerUser(QString username, QString password);
     void loginUser(QString username, QString password);
+    void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
 
     void onServerMessasge();
-private:
-    QUdpSocket *serverConnection;
 
     QString username;// these two variables must
     QString password;// be filled during logining
+private:
+    QUdpSocket *serverConnection;
+
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined);
+    void AddedNewChat(bool isAdded);
 };
 
 #endif // CLIENT_H

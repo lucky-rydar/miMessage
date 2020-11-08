@@ -1,12 +1,12 @@
 #include "addchatform.h"
 #include "ui_addchatform.h"
 
-AddChatForm::AddChatForm(QString *usernameToAdd, QWidget *parent) :
+AddChatForm::AddChatForm(Client *client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddChatForm)
 {
+    this->client = client;
     ui->setupUi(this);
-    this->usernameToAdd = usernameToAdd;
 }
 
 AddChatForm::~AddChatForm()
@@ -16,7 +16,8 @@ AddChatForm::~AddChatForm()
 
 void AddChatForm::on_createChat_clicked()
 {
-    *this->usernameToAdd = ui->usernameToAdd->text();
+    if(ui->usernameToAdd->text().isEmpty())
+        return;
 
     //tell the user if chat added
     this->close();

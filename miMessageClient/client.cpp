@@ -28,6 +28,18 @@ void Client::loginUser(QString username, QString password)
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
 }
 
+void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
+{
+    QJsonObject toSend;// TODO
+    toSend["username"] = this->username;
+    toSend["password"] = this->password;
+    toSend["message-type"] = "adding-chat";
+    toSend["chat-or-group"] = chatOrGroup;
+    toSend["chat-or-group-name"] = chatOrGroupName;
+
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
+}
+
 void Client::onServerMessasge()
 {
     while(serverConnection->hasPendingDatagrams())

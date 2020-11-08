@@ -109,6 +109,9 @@ void MainWindow::on_LoginUserButton_clicked()
                 ui->logPassword->clear();
                 ui->logUsername->clear();
                 ui->FormsAndMainMenu->setCurrentIndex(2);
+
+                client->username = ui->logUsername->text();
+                client->username = ui->logPassword->text();
             }
             else
             {
@@ -124,6 +127,11 @@ void MainWindow::on_LoginUserButton_clicked()
 
 void MainWindow::on_AddChat_clicked()
 {
-    auto chatForm = new AddChatForm(usernameToAdd);
+    AddChatForm *chatForm = new AddChatForm(client, this);
+    connect(chatForm, &AddChatForm::newChat, [=](){
+        //add new chat
+
+    });
+
     chatForm->show();
 }
