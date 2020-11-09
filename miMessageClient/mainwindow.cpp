@@ -128,8 +128,10 @@ void MainWindow::on_LoginUserButton_clicked()
 void MainWindow::on_AddChat_clicked()
 {
     AddChatForm *chatForm = new AddChatForm(client);
-    connect(chatForm, &AddChatForm::newChat, [=](){
-        //add new chat
+    connect(chatForm, &AddChatForm::newChat, [=](QString chatName, int chatId){
+        QPushButton *tempButton = new QPushButton(chatName);
+        this->chatsList.push_back(new Chat(tempButton, chatId, chatName, this));
+
         delete chatForm;
     });
 

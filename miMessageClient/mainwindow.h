@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <client.h>
 #include <addchatform.h>
+#include <chat.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,5 +38,6 @@ private:
     Client *client;
 
     QString *usernameToAdd;
+    QList<Chat*> chatsList;
 };
 #endif // MAINWINDOW_H

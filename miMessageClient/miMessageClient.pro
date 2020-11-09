@@ -10,12 +10,14 @@ CONFIG += c++11
 
 SOURCES += \
     addchatform.cpp \
+    chat.cpp \
     client.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     addchatform.h \
+    chat.h \
     client.h \
     mainwindow.h
 

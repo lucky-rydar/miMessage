@@ -62,7 +62,7 @@ void Client::onServerMessasge()
         else if(obj["message-type"] == "login-status")
             emit Logined(obj["logined"].toBool());
         else if(obj["message-type"] == "")
-            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-or-group"].toString());
+            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-or-group"].toString(), obj["chat-id"].toInt());
     }
 
 

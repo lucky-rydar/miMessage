@@ -20,7 +20,7 @@ private slots:
     void on_createChat_clicked();
 
 signals:
-    void newChat(QString chatName);
+    void newChat(QString chatName, int chatId);
 
 private:
     Ui::AddChatForm *ui;

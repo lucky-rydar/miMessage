@@ -25,7 +25,7 @@ private:
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined);
-    void AddedNewChat(bool isAdded, QString chatOrGroupName, QString chatOrGroup);
+    void AddedNewChat(bool isAdded, QString chatOrGroupName, QString chatOrGroup, int chatId);
 };
 
 #endif // CLIENT_H
