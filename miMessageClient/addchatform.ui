@@ -57,14 +57,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="GroupRadio">
            <property name="text">
             <string>Group</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="ChatRadio">
            <property name="text">
             <string>User</string>
            </property>
@@ -87,7 +87,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="usernameToAdd"/>
+            <widget class="QLineEdit" name="chatOrGroupNameEdit"/>
            </item>
           </layout>
          </item>

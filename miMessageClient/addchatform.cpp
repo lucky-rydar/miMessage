@@ -16,9 +16,19 @@ AddChatForm::~AddChatForm()
 
 void AddChatForm::on_createChat_clicked()
 {
-    if(ui->usernameToAdd->text().isEmpty())
+    if(ui->chatOrGroupNameEdit->text().isEmpty())
         return;
 
+    QString chatOrGroup;
+    if(ui->GroupRadio->isEnabled())
+        chatOrGroup = "group";
+    else if(ui->ChatRadio->isEnabled())
+        chatOrGroup = "chat";
+
+    client->addNewChatGroup(ui->chatOrGroupNameEdit->text(), chatOrGroup);
+    connect(client, &Client::AddedNewChat, [=](){
+
+    });
     //tell the user if chat added
     this->close();
 }

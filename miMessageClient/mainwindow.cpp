@@ -127,10 +127,10 @@ void MainWindow::on_LoginUserButton_clicked()
 
 void MainWindow::on_AddChat_clicked()
 {
-    AddChatForm *chatForm = new AddChatForm(client, this);
+    AddChatForm *chatForm = new AddChatForm(client);
     connect(chatForm, &AddChatForm::newChat, [=](){
         //add new chat
-
+        delete chatForm;
     });
 
     chatForm->show();
