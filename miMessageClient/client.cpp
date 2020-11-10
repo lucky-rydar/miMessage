@@ -30,12 +30,13 @@ void Client::loginUser(QString username, QString password)
 
 void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
 {
-    QJsonObject toSend;// TODO
+    QJsonObject toSend;
     toSend["username"] = this->username;
     toSend["password"] = this->password;
-    toSend["message-type"] = "adding-chat";
+    toSend["message-type"] = "adding-chat-group";
     toSend["chat-or-group"] = chatOrGroup;
     toSend["chat-or-group-name"] = chatOrGroupName;
+    qDebug() << toSend;
 
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
 }
@@ -55,14 +56,14 @@ void Client::onServerMessasge()
         QJsonDocument doc = QJsonDocument::fromJson(buff);
         QJsonObject obj = doc.object();
 
-        qDebug() << obj;
+        qDebug() << "Received message" << obj;
 
         if(obj["message-type"] == "reg-status")
             emit Registered(obj["registered"].toBool());
         else if(obj["message-type"] == "login-status")
             emit Logined(obj["logined"].toBool());
-        else if(obj["message-type"] == "")
-            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-or-group"].toString(), obj["chat-id"].toInt());
+        else if(obj["message-type"] == "adding-chat-group-status")
+            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
     }
 
 

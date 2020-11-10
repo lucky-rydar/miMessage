@@ -31,3 +31,46 @@ bool DatabaseController::isRegistered(QString username, QString hashedPassword)
 {
     return QSqlQuery("SELECT * FROM User WHERE username = '" + username + "' AND hashed_password = '" + hashedPassword + "';", connection).next();
 }
+
+bool DatabaseController::chatExist(QString username1, QString username2)
+{
+    QString chatName = usernamesToChatName(username1, username2);
+
+    return QSqlQuery("SELECT * FROM Chat WHERE chat_name = '" + chatName + "'", connection).next();
+}
+
+bool DatabaseController::addChat(QString username1, QString username2)
+{
+    if(!QSqlQuery("SELECT * FROM User WHERE username = \'" + username1 + "\'", connection).next() || !QSqlQuery("SELECT * FROM User WHERE username = \'" + username2 + "\'", connection).next())
+        return false;
+
+    QString chatName = usernamesToChatName(username1, username2);
+
+    QSqlQuery("INSERT INTO Chat(chat_name) VALUES(\'" + chatName + "\')", connection);
+
+    int chatIdInt = chatIdByName(chatName);
+
+    QSqlQuery("INSERT INTO ChatMember(chat_id, username) VALUES(\'" + QVariant(chatIdInt).toString() + "\', \'" + username1 + "\')", connection);
+    QSqlQuery("INSERT INTO ChatMember(chat_id, username) VALUES(\'" + QVariant(chatIdInt).toString() + "\', \'" + username2 + "\')", connection);
+
+    return true;
+}
+
+QString DatabaseController::usernamesToChatName(QString username1, QString username2)
+{
+    QString chatName;
+    if(username1.toUtf8()[0] < username2.toUtf8()[0])
+        chatName = username1 + "-" + username2;
+    else
+        chatName = username2 + "-" + username1;
+
+    return chatName;
+}
+
+int DatabaseController::chatIdByName(QString chatName)
+{
+    QSqlQuery getId("SELECT * FROM Chat WHERE chat_name = \'" + chatName  + "\'", connection);
+    getId.exec();
+    getId.next();
+    return getId.value(0).toInt();
+}

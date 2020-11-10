@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     client = new Client(this);
     usernameToAdd = new QString();
+
+    ui->FormsAndMainMenu->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -106,12 +108,14 @@ void MainWindow::on_LoginUserButton_clicked()
             {
                 ui->logInfoLabel->setText("You are logined successfully");
                 palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
-                ui->logPassword->clear();
-                ui->logUsername->clear();
-                ui->FormsAndMainMenu->setCurrentIndex(2);
 
                 client->username = ui->logUsername->text();
-                client->username = ui->logPassword->text();
+                client->password = ui->logPassword->text();
+
+                ui->logPassword->clear();
+                ui->logUsername->clear();
+
+                ui->FormsAndMainMenu->setCurrentIndex(2);
             }
             else
             {
@@ -129,8 +133,13 @@ void MainWindow::on_AddChat_clicked()
 {
     AddChatForm *chatForm = new AddChatForm(client);
     connect(chatForm, &AddChatForm::newChat, [=](QString chatName, int chatId){
+        //TODO: connect new chat with some functionality
         QPushButton *tempButton = new QPushButton(chatName);
         this->chatsList.push_back(new Chat(tempButton, chatId, chatName, this));
+
+        ui->ChatButtonsList->addWidget(tempButton);
+
+        //qDebug() << "new chat added" << chatName << chatId;
 
         delete chatForm;
     });

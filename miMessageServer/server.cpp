@@ -35,6 +35,7 @@ void Server::onNewClientMessage()
         QJsonObject toSend;
 
         qDebug() << "new Message";
+        qDebug() << clientMessage;
 
         if(clientMessage["message-type"] == "registration")
         {
@@ -46,22 +47,39 @@ void Server::onNewClientMessage()
                 dbController->addUser(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
                 toSend["registered"] = true;
             }
-            qDebug() << toSend;
+            qInfo() << "registration";
+            qInfo() << toSend;
         }
         else if(clientMessage["message-type"] == "logining")
         {
             toSend["message-type"] = "login-status";
             toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
             //TODO: add the list of all chats too
-
-            qDebug() << toSend;
+            qInfo() << "logining";
+            qInfo() << toSend;
         }
+        else if(clientMessage["message-type"] == "adding-chat-group")
+        {
+            qInfo() << "Adding chat";
+            toSend["message-type"] = "adding-chat-group-status";
+            if(clientMessage["chat-or-group"] == "chat")
+            {
+                if(!dbController->chatExist(clientMessage["username"].toString(), clientMessage["chat-or-group-name"].toString()))
+                {
+                    QString chatName = dbController->usernamesToChatName(clientMessage["username"].toString(), clientMessage["chat-or-group-name"].toString());
 
+                    toSend["is-added"] = dbController->addChat(clientMessage["username"].toString(), clientMessage["chat-or-group-name"].toString());
+                    toSend["chat-or-group"] = "chat";
+                    toSend["chat-or-group-name"] = chatName;
+                    toSend["chat-id"] = dbController->chatIdByName(chatName);
+                }
+            }
+            else if(clientMessage["chat-or-group"] == "group")
+            {
+                toSend["message-type"] = "adding-chat-group-status";
+                //TODO: later add groups but it should looks such as a chat
+            }
+        }
         udpServer->writeDatagram(QJsonDocument(toSend).toJson(), senderIP, 444);
-
     }
-
-
-
-
 }
