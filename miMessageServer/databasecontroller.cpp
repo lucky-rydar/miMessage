@@ -74,3 +74,21 @@ int DatabaseController::chatIdByName(QString chatName)
     getId.next();
     return getId.value(0).toInt();
 }
+
+QList<Chat> DatabaseController::getChatsByUsername(QString username)
+{
+    QList<Chat> chats;
+    QSqlQuery chatIds("SELECT chat_id FROM ChatMember WHERE username = '" + username + "'", connection);
+    chatIds.exec();
+
+    int buffId = 0;
+    while(chatIds.next())
+    {
+        buffId = chatIds.value(0).toInt();
+        QSqlQuery chatName("SELECT chat_name FROM Chat WHERE id = '" + QString(buffId) + "'", connection);
+        chatName.exec();
+        chats.push_back(Chat(buffId, chatName.value(0).toString()));
+    }
+
+    return chats;
+}
