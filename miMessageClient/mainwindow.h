@@ -36,8 +36,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     Client *client;
+    AddChatForm *chatForm;
 
     QString *usernameToAdd;
     QList<Chat*> chatsList;
+
+    void addChatToList(QString chatName, int chatId);
 };
 #endif // MAINWINDOW_H
