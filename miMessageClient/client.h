@@ -26,6 +26,7 @@ signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined);
     void AddedNewChat(bool isAdded, QString chatOrGroupName, int chatId);
+    void newMessage(QString chatName, QString text);
 };
 
 #endif // CLIENT_H

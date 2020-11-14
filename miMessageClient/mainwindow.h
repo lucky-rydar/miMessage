@@ -20,18 +20,13 @@ public:
     ~MainWindow();
 
 private slots:
-
     void on_Registration_clicked();
-
     void on_Logining_clicked();
-
     void on_Send_clicked();
-
     void on_RegisterUserButton_clicked();
-
     void on_LoginUserButton_clicked();
-
     void on_AddChat_clicked();
+    void onNewMessage(QString chatName, QString messageText);
 
 private:
     Ui::MainWindow *ui;

@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     usernameToAdd = new QString();
 
     ui->FormsAndMainMenu->setCurrentIndex(0);
+
+    connect(client, &Client::newMessage, this, &MainWindow::onNewMessage);
 }
 
 MainWindow::~MainWindow()
@@ -138,6 +140,11 @@ void MainWindow::on_AddChat_clicked()
     chatForm->show();
 
     return;
+}
+
+void MainWindow::onNewMessage(QString chatName, QString messageText)
+{
+    // here should be reaction on new message
 }
 
 void MainWindow::addChatToList(QString chatName, int chatId)
