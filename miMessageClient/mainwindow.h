@@ -28,6 +28,8 @@ private slots:
     void on_AddChat_clicked();
     void onNewMessage(QString chatName, QString messageText);
 
+    void on_QuitButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Client *client;

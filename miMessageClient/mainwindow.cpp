@@ -156,7 +156,11 @@ void MainWindow::addChatToList(QString chatName, int chatId)
 
     //TODO: connect new chat with some functionality
 
-
-
     disconnect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
+}
+
+void MainWindow::on_QuitButton_clicked()
+{
+    ui->FormsAndMainMenu->setCurrentIndex(0);
+    ui->logInfoLabel->clear();
 }
