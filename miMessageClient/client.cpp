@@ -56,16 +56,22 @@ void Client::onServerMessasge()
         QJsonDocument doc = QJsonDocument::fromJson(buff);
         QJsonObject obj = doc.object();
 
-        qDebug() << "Received message" << obj;
+        qDebug() << obj["username"].toString();
+        qDebug() << this->username;
 
-        if(obj["message-type"] == "reg-status")
-            emit Registered(obj["registered"].toBool());
-        else if(obj["message-type"] == "login-status")
-            emit Logined(obj["logined"].toBool());
-        else if(obj["message-type"] == "adding-chat-group-status")
-            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
-        else if(obj["message-type"] == "new-message")
-            emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString());
+        //if(obj["username"].toString() == this->username)
+        {
+            qDebug() << "Received message" << obj;
+            if(obj["message-type"] == "reg-status")
+                emit Registered(obj["registered"].toBool());
+            else if(obj["message-type"] == "login-status")
+                emit Logined(obj["logined"].toBool());
+            else if(obj["message-type"] == "adding-chat-group-status")
+                emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
+            else if(obj["message-type"] == "new-message")
+                emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString());
+        }
+
     }
 
 

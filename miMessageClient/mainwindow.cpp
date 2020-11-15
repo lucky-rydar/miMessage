@@ -99,6 +99,9 @@ void MainWindow::on_LoginUserButton_clicked()
     {
         client->loginUser(ui->logUsername->text(), ui->logPassword->text());
 
+        client->username = ui->logUsername->text();
+        client->password = ui->logPassword->text();
+
         QPalette palette = ui->logInfoLabel->palette();
         ui->logInfoLabel->setText("Trying to login you");
         palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
@@ -111,8 +114,8 @@ void MainWindow::on_LoginUserButton_clicked()
                 ui->logInfoLabel->setText("You are logined successfully");
                 palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
 
-                client->username = ui->logUsername->text();
-                client->password = ui->logPassword->text();
+                //client->username = ui->logUsername->text();
+                //client->password = ui->logPassword->text();
 
                 ui->logPassword->clear();
                 ui->logUsername->clear();
@@ -123,6 +126,12 @@ void MainWindow::on_LoginUserButton_clicked()
             {
                 ui->logInfoLabel->setText("Wrong username or password");
                 palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
+
+                client->username.clear();
+                client->password.clear();
+
+                ui->logPassword->clear();
+                ui->logUsername->clear();
             }
             ui->logInfoLabel->setPalette(palette);
         });

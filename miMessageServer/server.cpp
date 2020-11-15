@@ -80,6 +80,9 @@ void Server::onNewClientMessage()
                 //TODO: later add groups but it should looks such as a chat
             }
         }
+        toSend["username"] = clientMessage["username"];
+
+        qInfo() << toSend;
         udpServer->writeDatagram(QJsonDocument(toSend).toJson(), senderIP, 444);
     }
 }
