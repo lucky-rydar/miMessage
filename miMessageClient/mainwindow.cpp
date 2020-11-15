@@ -162,5 +162,7 @@ void MainWindow::addChatToList(QString chatName, int chatId)
 void MainWindow::on_QuitButton_clicked()
 {
     ui->FormsAndMainMenu->setCurrentIndex(0);
+    client->username = "";
+    client->password = "";
     ui->logInfoLabel->clear();
 }

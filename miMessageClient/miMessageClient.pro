@@ -13,13 +13,15 @@ SOURCES += \
     chat.cpp \
     client.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    message.cpp
 
 HEADERS += \
     addchatform.h \
     chat.h \
     client.h \
-    mainwindow.h
+    mainwindow.h \
+    message.h
 
 FORMS += \
     addchatform.ui \
