@@ -56,10 +56,7 @@ void Client::onServerMessasge()
         QJsonDocument doc = QJsonDocument::fromJson(buff);
         QJsonObject obj = doc.object();
 
-        qDebug() << obj["username"].toString();
-        qDebug() << this->username;
-
-        //if(obj["username"].toString() == this->username)
+        if(obj["username"].toString() == this->username)
         {
             qDebug() << "Received message" << obj;
             if(obj["message-type"] == "reg-status")

@@ -114,9 +114,6 @@ void MainWindow::on_LoginUserButton_clicked()
                 ui->logInfoLabel->setText("You are logined successfully");
                 palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
 
-                //client->username = ui->logUsername->text();
-                //client->password = ui->logPassword->text();
-
                 ui->logPassword->clear();
                 ui->logUsername->clear();
 
