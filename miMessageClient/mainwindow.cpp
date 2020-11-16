@@ -32,16 +32,7 @@ void MainWindow::on_Logining_clicked()
 
 void MainWindow::on_Send_clicked()
 {
-    while(ui->ChatButtonsList->count() > 0)
-    {
-        QLayoutItem *item = ui->ChatButtonsList->itemAt(0);
-        ui->ChatButtonsList->removeItem(item);
-        delete chatsList[0]->chatButton;
-        chatsList.pop_front();
-        delete item;
-    }
 
-    //qDebug() << item->
 }
 
 void MainWindow::on_RegisterUserButton_clicked()
