@@ -3,8 +3,10 @@
 Client::Client(QObject *parent) : QObject(parent)
 {
     this->serverConnection = new QUdpSocket(this);
-    serverConnection->bind(QHostAddress::Any, 444);
+    serverConnection->bind(QHostAddress::Any, 444); // here may need to use address from private
 
+    this->serverAddress = QHostAddress("127.0.0.1");
+    this->serverPort = 333;
     connect(serverConnection, &QTcpSocket::readyRead, this, &Client::onServerMessasge);
 }
 
@@ -15,7 +17,7 @@ void Client::registerUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
 }
 
 void Client::loginUser(QString username, QString password)
@@ -25,7 +27,7 @@ void Client::loginUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
 }
 
 void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
@@ -38,7 +40,21 @@ void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
     toSend["chat-or-group-name"] = chatOrGroupName;
     qDebug() << toSend;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), QHostAddress::LocalHost, 333);
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+}
+
+void Client::sendMessageTo(QString messageText, QString chatName, QString chatOrGroup)
+{
+    QJsonObject toSend;
+    toSend["username"] = this->username;
+    toSend["password"] = this->password;
+    toSend["message-type"] = "sending-message";
+    toSend["message-text"] = messageText;
+    toSend["chat-or-group"] = chatOrGroup;
+    toSend["chat-or-group-name"] = chatName;
+    qDebug() << toSend;
+
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
 }
 
 void Client::onServerMessasge()

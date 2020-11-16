@@ -14,6 +14,7 @@ public:
     void registerUser(QString username, QString password);
     void loginUser(QString username, QString password);
     void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
+    void sendMessageTo(QString messageText, QString chatName, QString chatOrGroup);
 
     void onServerMessasge();
 
@@ -21,7 +22,8 @@ public:
     QString password;// be filled during logining
 private:
     QUdpSocket *serverConnection;
-
+    QHostAddress serverAddress;
+    int serverPort;
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);

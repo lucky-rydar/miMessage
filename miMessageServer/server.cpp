@@ -48,7 +48,6 @@ void Server::onNewClientMessage()
                 toSend["registered"] = true;
             }
             qInfo() << "registration";
-            qInfo() << toSend;
         }
         else if(clientMessage["message-type"] == "logining")
         {
@@ -70,7 +69,6 @@ void Server::onNewClientMessage()
             toSend["chats-info"] = chatsInfo;
 
             qInfo() << "logining";
-            qInfo() << toSend;
         }
         else if(clientMessage["message-type"] == "adding-chat-group")
         {
