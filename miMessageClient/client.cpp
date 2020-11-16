@@ -51,7 +51,7 @@ void Client::onServerMessasge()
         quint16 senderPort;
         serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);
 
-        qDebug() << buff;
+        //qDebug() << buff;
 
         QJsonDocument doc = QJsonDocument::fromJson(buff);
         QJsonObject obj = doc.object();
@@ -62,7 +62,7 @@ void Client::onServerMessasge()
             if(obj["message-type"] == "reg-status")
                 emit Registered(obj["registered"].toBool());
             else if(obj["message-type"] == "login-status")
-                emit Logined(obj["logined"].toBool());
+                emit Logined(obj["logined"].toBool(), obj);
             else if(obj["message-type"] == "adding-chat-group-status")
                 emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
             else if(obj["message-type"] == "new-message")

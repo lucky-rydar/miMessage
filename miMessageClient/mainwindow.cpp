@@ -32,7 +32,16 @@ void MainWindow::on_Logining_clicked()
 
 void MainWindow::on_Send_clicked()
 {
+    while(ui->ChatButtonsList->count() > 0)
+    {
+        QLayoutItem *item = ui->ChatButtonsList->itemAt(0);
+        ui->ChatButtonsList->removeItem(item);
+        delete chatsList[0]->chatButton;
+        chatsList.pop_front();
+        delete item;
+    }
 
+    //qDebug() << item->
 }
 
 void MainWindow::on_RegisterUserButton_clicked()
@@ -57,6 +66,9 @@ void MainWindow::on_RegisterUserButton_clicked()
     else
     {
         ui->regInfoLabel->setText("Trying to register you...");
+
+        client->username = ui->regUsername->text(); //HERE!!!!
+
         QPalette palette = ui->regInfoLabel->palette();
         palette.setColor(ui->regInfoLabel->foregroundRole(), QColor(0, 200, 0));
         ui->regInfoLabel->setPalette(palette);
@@ -70,6 +82,7 @@ void MainWindow::on_RegisterUserButton_clicked()
                 ui->regInfoLabel->setText("Registered successful!");
                 ui->regPassword1->clear();
                 ui->regPassword2->clear();
+                client->username.clear();
                 ui->regUsername->clear();
                 ui->FormsAndMainMenu->setCurrentIndex(0);
             }
@@ -107,34 +120,8 @@ void MainWindow::on_LoginUserButton_clicked()
         palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
         ui->logInfoLabel->setPalette(palette);
 
-        connect(client, &Client::Logined, [=](bool isLogined){
-            QPalette palette = ui->logInfoLabel->palette();
-            if(isLogined)
-            {
-                ui->logInfoLabel->setText("You are logined successfully");
-                palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
-
-                ui->logPassword->clear();
-                ui->logUsername->clear();
-
-                ui->FormsAndMainMenu->setCurrentIndex(2);
-            }
-            else
-            {
-                ui->logInfoLabel->setText("Wrong username or password");
-                palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
-
-                client->username.clear();
-                client->password.clear();
-
-                ui->logPassword->clear();
-                ui->logUsername->clear();
-            }
-            ui->logInfoLabel->setPalette(palette);
-        });
+        connect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
     }
-
-
 }
 
 void MainWindow::on_AddChat_clicked()
@@ -153,10 +140,45 @@ void MainWindow::onNewMessage(QString chatName, QString messageText)
     // here should be reaction on new message
 }
 
+void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
+{
+    QPalette palette = ui->logInfoLabel->palette();
+    if(isLogined)
+    {
+        ui->logInfoLabel->setText("You are logined successfully");
+        palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
+
+        for (int i = 0; i < obj["chats-info"].toArray().size(); i++)
+        {
+            QPushButton *tempButton = new QPushButton(obj["chats-info"].toArray().at(i)["chat-name"].toString());
+            this->chatsList.append(new Chat(tempButton, obj["chats-info"].toArray().at(i)["chat-id"].toInt(),
+                    obj["chats-info"].toArray().at(i)["chat-name"].toString()));
+            ui->ChatButtonsList->addWidget(tempButton);
+        }
+
+        ui->logPassword->clear();
+        ui->logUsername->clear();
+        ui->FormsAndMainMenu->setCurrentIndex(2);
+    }
+    else
+    {
+        ui->logInfoLabel->setText("Wrong username or password");
+        palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
+
+        client->username.clear();
+        client->password.clear();
+
+        ui->logPassword->clear();
+        ui->logUsername->clear();
+    }
+    ui->logInfoLabel->setPalette(palette);
+    disconnect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
+}
+
 void MainWindow::addChatToList(QString chatName, int chatId)
 {
     QPushButton *tempButton = new QPushButton(chatName);
-    this->chatsList.push_back(new Chat(tempButton, chatId, chatName, this));
+    this->chatsList.push_back(new Chat(tempButton, chatId, chatName, "chat", this));
 
     ui->ChatButtonsList->addWidget(tempButton);
 
@@ -171,4 +193,14 @@ void MainWindow::on_QuitButton_clicked()
     client->username = "";
     client->password = "";
     ui->logInfoLabel->clear();
+
+    while(ui->ChatButtonsList->count() > 0)
+    {
+        QLayoutItem *item = ui->ChatButtonsList->itemAt(0);
+        ui->ChatButtonsList->removeItem(item);
+        delete chatsList[0]->chatButton;
+        chatsList.pop_front();
+        delete item;
+    }
+
 }

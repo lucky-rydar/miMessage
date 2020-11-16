@@ -27,7 +27,7 @@ private slots:
     void on_LoginUserButton_clicked();
     void on_AddChat_clicked();
     void onNewMessage(QString chatName, QString messageText);
-
+    void onLoginedUser(bool isLogined, QJsonObject obj); // here
     void on_QuitButton_clicked();
 
 private:

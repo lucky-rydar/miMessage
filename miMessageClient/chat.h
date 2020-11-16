@@ -9,8 +9,8 @@ class Chat : public QObject
 {
     Q_OBJECT
 public:
-    explicit Chat(QPushButton* btn, int chatId, QString chatName, QObject *parent = nullptr);
-    QPushButton* chatInList;
+    explicit Chat(QPushButton* btn, int chatId, QString chatName, QString chatOrGroup = "chat", QObject *parent = nullptr);
+    QPushButton* chatButton;
     int chatId;
     QString chatName;
     QString chatOrGroup;

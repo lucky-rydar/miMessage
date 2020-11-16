@@ -15,6 +15,7 @@ public:
     QString fromUser;
     QString toUser;
     int groupId;
+    //TODO: add the list of sorted messages
 };
 
 #endif // MESSAGE_H

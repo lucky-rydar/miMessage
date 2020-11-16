@@ -55,6 +55,20 @@ void Server::onNewClientMessage()
             toSend["message-type"] = "login-status";
             toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
             //TODO: add the list of all chats too
+            auto chatsList = dbController->getChatsByUsername(clientMessage["username"].toString());
+
+
+            QJsonArray chatsInfo;
+            for(int i = 0; i < chatsList.size(); i++)
+            {
+                QJsonObject chatInfo;
+                chatInfo["chat-name"] = chatsList[i].chatName;
+                chatInfo["chat-id"] = chatsList[i].chatId;
+
+                chatsInfo.append(chatInfo);
+            }
+            toSend["chats-info"] = chatsInfo;
+
             qInfo() << "logining";
             qInfo() << toSend;
         }
