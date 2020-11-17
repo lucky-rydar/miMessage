@@ -24,7 +24,7 @@ void ChatManager::removeChat(QString chatName)
 
 void ChatManager::addMessageTo(QString chatName, Message message)
 {
-
+    getChatByName(chatName)->messages.push_back(message);
 }
 
 Chat *ChatManager::getChatByName(QString chatName)
