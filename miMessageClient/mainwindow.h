@@ -29,7 +29,7 @@ private slots:
     void onNewMessage(QString chatName, QString messageText);
     void onLoginedUser(bool isLogined, QJsonObject obj); // here
     void on_QuitButton_clicked();
-
+    void onChatButtonClicked();
 private:
     Ui::MainWindow *ui;
     Client *client;

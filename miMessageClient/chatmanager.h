@@ -16,9 +16,10 @@ public:
     Chat* getChatByName(QString chatName);
 
     QList<Chat*> chatsList;
+    QString currentChatName;
 private:
 
-    QString currentChatName;
+
 signals:
 
 };

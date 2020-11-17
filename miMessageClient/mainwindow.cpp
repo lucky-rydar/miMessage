@@ -149,6 +149,7 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
             chatManager->addChat(new Chat(tempButton, obj["chats-info"].toArray().at(i)["chat-id"].toInt(),
                     obj["chats-info"].toArray().at(i)["chat-name"].toString()));
             ui->ChatButtonsList->addWidget(tempButton);
+            connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
         }
 
         ui->logPassword->clear();
@@ -167,17 +168,17 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
         ui->logUsername->clear();
     }
     ui->logInfoLabel->setPalette(palette);
+    this->chatManager->
     disconnect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
 }
 
 void MainWindow::addChatToList(QString chatName, int chatId)
 {
     QPushButton *tempButton = new QPushButton(chatName);
-    //this->chatsList.push_back(new Chat(tempButton, chatId, chatName, "chat", this));
     this->chatManager->addChat(new Chat(tempButton, chatId, chatName, "chat"));
     ui->ChatButtonsList->addWidget(tempButton);
 
-    //TODO: connect new chat with some functionality
+    connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
 
     disconnect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
 }
@@ -188,6 +189,7 @@ void MainWindow::on_QuitButton_clicked()
     client->username = "";
     client->password = "";
     ui->logInfoLabel->clear();
+    chatManager->currentChatName.clear();
 
     while(ui->ChatButtonsList->count() > 0)
     {
@@ -198,4 +200,11 @@ void MainWindow::on_QuitButton_clicked()
         delete item;
     }
 
+}
+
+void MainWindow::onChatButtonClicked()
+{
+    QPushButton* chatButton = qobject_cast<QPushButton*>(sender());
+    this->chatManager->currentChatName = chatButton->text();
+    qDebug() << this->chatManager->currentChatName;
 }
