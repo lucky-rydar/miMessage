@@ -97,3 +97,8 @@ QList<Chat> DatabaseController::getChatsByUsername(QString username)
 
     return chats;
 }
+
+void DatabaseController::addMessage(QString fromUser)
+{
+
+}

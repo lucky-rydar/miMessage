@@ -2,19 +2,18 @@
 #define MESSAGE_H
 
 #include <QObject>
-
+#include <QDateTime>
 class Message : public QObject
 {
     Q_OBJECT
 public:
-    explicit Message(QObject *parent = nullptr);
+    //explicit Message(QObject *parent = nullptr);
+    Message(QString chatName, QString messageText, QDateTime dateTime, int messageId, QObject* parent = nullptr);
 
     int messageId;
-    QDateTime *dateTime;
-    QString messageText;
-    QString fromUser;
-    QString toUser;
-    int groupId; // if exist
+    QDateTime dateTime;
+    QString massageText;
+    QString chatName;
 
 signals:
 
