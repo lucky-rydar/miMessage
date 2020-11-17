@@ -52,6 +52,7 @@ void Client::sendMessageTo(QString messageText, QString chatName, QString chatOr
     toSend["message-text"] = messageText;
     toSend["chat-or-group"] = chatOrGroup;
     toSend["chat-or-group-name"] = chatName;
+    toSend["date-time-string"] = QDateTime::currentDateTime().toString();
     qDebug() << toSend;
 
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);

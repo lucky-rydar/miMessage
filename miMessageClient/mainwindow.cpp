@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     client = new Client(this);
     usernameToAdd = new QString();
+    chatManager = new ChatManager(this);
 
     ui->FormsAndMainMenu->setCurrentIndex(0);
 
@@ -32,7 +33,10 @@ void MainWindow::on_Logining_clicked()
 
 void MainWindow::on_Send_clicked()
 {
-
+    /*if(!ui->MessageTextEdit->text().isEmpty())
+    {
+        //client->sendMessageTo(ui->MessageTextEdit->text());
+    }*/
 }
 
 void MainWindow::on_RegisterUserButton_clicked()
@@ -169,8 +173,8 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
 void MainWindow::addChatToList(QString chatName, int chatId)
 {
     QPushButton *tempButton = new QPushButton(chatName);
-    this->chatsList.push_back(new Chat(tempButton, chatId, chatName, "chat", this));
-
+    //this->chatsList.push_back(new Chat(tempButton, chatId, chatName, "chat", this));
+    this->chatManager->addChat(new Chat(tempButton, chatId, chatName, "chat"));
     ui->ChatButtonsList->addWidget(tempButton);
 
     //TODO: connect new chat with some functionality

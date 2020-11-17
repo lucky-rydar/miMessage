@@ -92,6 +92,11 @@ void Server::onNewClientMessage()
                 //TODO: later add groups but it should looks such as a chat
             }
         }
+        else if(clientMessage["message-type"] == "sending-message")
+        {
+            qInfo() << "Sending message";
+
+        }
         toSend["username"] = clientMessage["username"];
 
         qInfo() << toSend;

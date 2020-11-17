@@ -16,9 +16,11 @@ public:
     bool isRegistered(QString username, QString hashedPassword);
     bool chatExist(QString username1, QString username2);
     bool addChat(QString username1, QString username2);
-    QString usernamesToChatName(QString username1, QString username2);
     int chatIdByName(QString chatName);
     QList<Chat> getChatsByUsername(QString username);
+    void addMessage(QString fromUser);
+
+    QString usernamesToChatName(QString username1, QString username2);
 
 private:
 
