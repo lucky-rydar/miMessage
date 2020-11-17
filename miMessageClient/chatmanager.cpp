@@ -32,7 +32,9 @@ Chat *ChatManager::getChatByName(QString chatName)
     for(int i = 0; i < this->chatsList.size(); i++)
     {
         if(chatsList[i]->chatName == chatName)
+        {
             return chatsList[i];
+        }
     }
     return nullptr;
 }

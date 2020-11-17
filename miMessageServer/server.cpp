@@ -95,7 +95,15 @@ void Server::onNewClientMessage()
         else if(clientMessage["message-type"] == "sending-message")
         {
             qInfo() << "Sending message";
+            toSend["message-type"] = "sent-message-status";
+            Message received(clientMessage["chat-or-group-name"].toString(), clientMessage["message-text"].toString(), clientMessage["sending-date-time"].toString());
+            dbController->addMessage(received, clientMessage["from-user"].toString(), clientMessage["to-user"].toString(), clientMessage["chat-or-group"].toString(),
+                    clientMessage["chat-or-group-name"].toString());
 
+            toSend["chat-name"] = clientMessage["chat-or-group-name"].toString();
+            toSend["message-text"] = clientMessage["message-text"].toString();
+            toSend["message-id"] = received.messageId;
+            toSend["from-user"] = clientMessage["from-user"].toString();
         }
         toSend["username"] = clientMessage["username"];
 

@@ -32,6 +32,7 @@ private slots:
     void onChatButtonClicked();
     void onMessageSent(Message message);
 
+    void UploadChat(QString chatName);
 private:
     Ui::MainWindow *ui;
     Client *client;

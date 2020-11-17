@@ -7,6 +7,7 @@
 #include <QtCore>
 #include <message.h>
 #include <chat.h>
+#include <regex>
 
 class Client : public QObject
 {
@@ -20,6 +21,8 @@ public:
 
     void onServerMessasge();
 
+    static QList<QString> usernamesFromChatName(QString chatName);
+
     QString username;// these two variables must
     QString password;// be filled during logining
 private:
@@ -30,7 +33,7 @@ signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);
     void AddedNewChat(bool isAdded, QString chatOrGroupName, int chatId);
-    void newMessage(QString chatName, QString text);
+    void newMessage(QString chatName, QString text); // TODO: rewrite
     void messageSent(Message message);
 };
 

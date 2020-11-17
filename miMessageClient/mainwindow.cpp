@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     chatManager = new ChatManager(this);
 
     ui->FormsAndMainMenu->setCurrentIndex(0);
+    //ui->MessagesArea->setReadOnly(true);
+    //ui->MessagesArea->setAlignment(Qt::AlignBottom);
 
     connect(client, &Client::newMessage, this, &MainWindow::onNewMessage);
 }
@@ -33,13 +35,13 @@ void MainWindow::on_Logining_clicked()
 
 void MainWindow::on_Send_clicked()
 {
-    if(!ui->MessageTextEdit->text().isEmpty())
+    if(!ui->MessageTextEdit->text().isEmpty() && !chatManager->currentChatName.isEmpty())
     {
         client->sendMessageTo(Message(chatManager->currentChatName, ui->MessageTextEdit->text()), chatManager->getChatByName(chatManager->currentChatName));
 
-        disconnect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
-        ui->MessageTextEdit->clear();
+        connect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
     }
+    ui->MessageTextEdit->clear();
 }
 
 void MainWindow::on_RegisterUserButton_clicked()
@@ -74,7 +76,6 @@ void MainWindow::on_RegisterUserButton_clicked()
         client->registerUser(ui->regUsername->text(), ui->regPassword1->text());
 
         connect(client, &Client::Registered, [=](bool isRegistered){
-            qDebug() << isRegistered;
             if(isRegistered)
             {
                 ui->regInfoLabel->setText("Registered successful!");
@@ -202,18 +203,42 @@ void MainWindow::on_QuitButton_clicked()
         this->chatManager->chatsList.pop_front();
         delete item;
     }
-
+    ui->MessagesArea->clear();
 }
 
 void MainWindow::onChatButtonClicked()
 {
     QPushButton* chatButton = qobject_cast<QPushButton*>(sender());
     this->chatManager->currentChatName = chatButton->text();
-    qDebug() << this->chatManager->currentChatName;
+
+    ui->currentChatLabel->setText(this->chatManager->currentChatName);
+
+    UploadChat(chatButton->text());
 }
 
 void MainWindow::onMessageSent(Message message)
 {
     chatManager->addMessage(message);
+
+    UploadChat(message.chatName);
     disconnect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
+}
+
+void MainWindow::UploadChat(QString chatName)
+{
+    ui->MessagesArea->clear();
+
+    Chat *chat = chatManager->getChatByName(chatName);
+    if(chat != nullptr)
+    {
+        QString buff;
+
+        for (int i = 0; i < chat->messages.size(); i++)
+        {
+            QString formatedMessage = "[" + chat->messages[i].dateTime.toString("hh:mm:ss") + "] " + chat->messages[i].from + ": " + chat->messages[i].massageText + "\n";
+            buff += formatedMessage;
+        }
+        ui->MessagesArea->setText(buff);
+    }
+
 }

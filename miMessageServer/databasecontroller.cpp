@@ -98,7 +98,23 @@ QList<Chat> DatabaseController::getChatsByUsername(QString username)
     return chats;
 }
 
-void DatabaseController::addMessage(Message message)
+void DatabaseController::addMessage(Message& message, QString fromUser, QString toUser, QString chatOrGroup, QString chatOrGroupName)
 {
-    QSqlQuery addMessage("INSERT INTO Message()", connection); // TODO
+    if(chatOrGroup == "chat")
+    {
+        QSqlQuery addMessage("INSERT INTO Message(date_time, message_text, from_user, to_user) VALUES('" + message.dateTime + "', "
+                                         "'" + message.massageText + "', '" + fromUser + "', '" + toUser + "')", connection);
+        QSqlQuery getLastMessageId("SELECT message_id FROM Message WHERE from_user = '" + fromUser + "' AND to_user = '" + toUser + "' ORDER BY message_id DESC LIMIT 1", connection);
+        getLastMessageId.exec();
+        getLastMessageId.next();
+
+        message.messageId = getLastMessageId.value(0).toInt();
+    }
+    else if(chatOrGroup == "group")
+    {
+        //TODO: add for chat almost the same
+    }
+
+
+
 }

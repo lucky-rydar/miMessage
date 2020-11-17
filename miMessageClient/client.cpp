@@ -51,8 +51,21 @@ void Client::sendMessageTo(Message message, Chat *chat)
     toSend["message-type"] = "sending-message";
     toSend["message-text"] = message.massageText;
     toSend["chat-or-group"] = chat->chatOrGroup;
-    toSend["chat-or-group-name"] = chat->chatOrGroup;
+    toSend["chat-or-group-name"] = chat->chatName;
     toSend["sending-date-time"] = message.dateTime.toString();
+
+    QList<QString> usernames = Client::usernamesFromChatName(chat->chatName);
+    if(usernames[0] == username)
+    {
+        toSend["from-user"] = usernames[0];
+        toSend["to-user"] = usernames[1];
+    }
+    else
+    {
+        toSend["from-user"] = usernames[1];
+        toSend["to-user"] = usernames[0];
+    }
+
     qDebug() << toSend;
 
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
@@ -83,12 +96,26 @@ void Client::onServerMessasge()
             else if(obj["message-type"] == "adding-chat-group-status")
                 emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
             else if(obj["message-type"] == "new-message")
-                emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString());
-            else if(obj["message-type"] == "message-sent")
-                emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["message-id"].toInt()));
+                emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString()); // TODO: rewrite
+            else if(obj["message-type"] == "sent-message-status")
+                emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
         }
 
     }
 
 
+}
+
+QList<QString> Client::usernamesFromChatName(QString chatName)
+{
+    std::regex rx("([A-Za-z0-9]+)-([A-Za-z0-9]+)");
+    std::string to_parse = chatName.toStdString();
+    std::smatch parsed;
+    std::regex_match(to_parse, parsed, rx);
+    QList<QString> result;
+
+    result.push_back(QString::fromStdString(parsed[1]));
+    result.push_back(QString::fromStdString(parsed[2]));
+
+    return result;
 }

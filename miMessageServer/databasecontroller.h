@@ -19,7 +19,7 @@ public:
     bool addChat(QString username1, QString username2);
     int chatIdByName(QString chatName);
     QList<Chat> getChatsByUsername(QString username);
-    void addMessage(Message message);
+    void addMessage(Message& message, QString fromUser, QString toUser, QString chatOrGroup, QString chatOrGroupName);
 
     QString usernamesToChatName(QString username1, QString username2);
 
