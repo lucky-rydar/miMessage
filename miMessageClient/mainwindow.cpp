@@ -37,7 +37,7 @@ void MainWindow::on_Send_clicked()
     {
         client->sendMessageTo(Message(chatManager->currentChatName, ui->MessageTextEdit->text()), chatManager->getChatByName(chatManager->currentChatName));
 
-
+        disconnect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
         ui->MessageTextEdit->clear();
     }
 }
@@ -133,7 +133,7 @@ void MainWindow::on_AddChat_clicked()
     return;
 }
 
-void MainWindow::onNewMessage(QString chatName, QString messageText)
+void MainWindow::onNewMessage(Message message)
 {
     // here should be reaction on new message
 }
@@ -210,4 +210,10 @@ void MainWindow::onChatButtonClicked()
     QPushButton* chatButton = qobject_cast<QPushButton*>(sender());
     this->chatManager->currentChatName = chatButton->text();
     qDebug() << this->chatManager->currentChatName;
+}
+
+void MainWindow::onMessageSent(Message message)
+{
+    chatManager->addMessage(message);
+    disconnect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
 }

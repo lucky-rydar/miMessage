@@ -26,10 +26,12 @@ private slots:
     void on_RegisterUserButton_clicked();
     void on_LoginUserButton_clicked();
     void on_AddChat_clicked();
-    void onNewMessage(QString chatName, QString messageText);
+    void onNewMessage(Message message);
     void onLoginedUser(bool isLogined, QJsonObject obj); // here
     void on_QuitButton_clicked();
     void onChatButtonClicked();
+    void onMessageSent(Message message);
+
 private:
     Ui::MainWindow *ui;
     Client *client;
