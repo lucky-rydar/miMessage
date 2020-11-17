@@ -22,7 +22,17 @@ void ChatManager::removeChat(QString chatName)
     }
 }
 
-void ChatManager::addMessageTo(QString chatName)
+void ChatManager::addMessageTo(QString chatName, Message message)
 {
 
+}
+
+Chat *ChatManager::getChatByName(QString chatName)
+{
+    for(int i = 0; i < this->chatsList.size(); i++)
+    {
+        if(chatsList[i]->chatName == chatName)
+            return chatsList[i];
+    }
+    return nullptr;
 }

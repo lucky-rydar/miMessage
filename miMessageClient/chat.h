@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtCore>
 #include <QPushButton>
+#include <message.h>
 
 class Chat : public QObject
 {
@@ -15,6 +16,7 @@ public:
     QString chatName;
     QString chatOrGroup;
 
+    QList<Message> messages;
 signals:
 
 };

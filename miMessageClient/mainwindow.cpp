@@ -146,7 +146,7 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
         for (int i = 0; i < obj["chats-info"].toArray().size(); i++)
         {
             QPushButton *tempButton = new QPushButton(obj["chats-info"].toArray().at(i)["chat-name"].toString());
-            this->chatsList.append(new Chat(tempButton, obj["chats-info"].toArray().at(i)["chat-id"].toInt(),
+            chatManager->addChat(new Chat(tempButton, obj["chats-info"].toArray().at(i)["chat-id"].toInt(),
                     obj["chats-info"].toArray().at(i)["chat-name"].toString()));
             ui->ChatButtonsList->addWidget(tempButton);
         }
@@ -193,8 +193,8 @@ void MainWindow::on_QuitButton_clicked()
     {
         QLayoutItem *item = ui->ChatButtonsList->itemAt(0);
         ui->ChatButtonsList->removeItem(item);
-        delete chatsList[0]->chatButton;
-        chatsList.pop_front();
+        delete this->chatManager->chatsList[0]->chatButton;
+        this->chatManager->chatsList.pop_front();
         delete item;
     }
 

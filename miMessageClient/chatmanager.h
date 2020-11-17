@@ -12,12 +12,16 @@ public:
 
     void addChat(Chat* chat);
     void removeChat(QString chatName);
-    void addMessageTo(QString chatName);
-private:
+    void addMessageTo(QString chatName, Message message);
+    Chat* getChatByName(QString chatName);
+
     QList<Chat*> chatsList;
+private:
+
     QString currentChatName;
 signals:
 
 };
+
 
 #endif // CHATMANAGER_H
