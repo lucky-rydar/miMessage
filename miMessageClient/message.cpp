@@ -1,13 +1,9 @@
 #include "message.h"
 
-Message::Message(int messageId, QString dateTime, QString fromUser, QString toUser, QString messageText, int groupId)
+Message::Message(QString chatName, QString messageText, int messageId)
 {
-    this->messageId = messageId;
-    this->dateTime.fromString(dateTime);
-    this->fromUser = fromUser;
-    this->toUser = toUser;
+    this->dateTime = QDateTime::currentDateTime();
     this->massageText = messageText;
-    this->groupId = groupId;
-
-
+    this->chatName = chatName;
+    this->messageId = messageId;
 }

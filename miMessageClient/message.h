@@ -7,14 +7,12 @@
 class Message
 {
 public:
-    Message(int messageId, QString dateTime, QString fromUser, QString toUser, QString messageText = "", int groupId = -1);
+    Message(QString chatName, QString messageText = "", int messageId = -1);
 
     int messageId;
     QDateTime dateTime;
     QString massageText;
-    QString fromUser;
-    QString toUser;
-    int groupId;
+    QString chatName;
 };
 
 #endif // MESSAGE_H

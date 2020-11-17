@@ -33,10 +33,13 @@ void MainWindow::on_Logining_clicked()
 
 void MainWindow::on_Send_clicked()
 {
-    /*if(!ui->MessageTextEdit->text().isEmpty())
+    if(!ui->MessageTextEdit->text().isEmpty())
     {
-        //client->sendMessageTo(ui->MessageTextEdit->text());
-    }*/
+        client->sendMessageTo(Message(chatManager->currentChatName, ui->MessageTextEdit->text()), chatManager->getChatByName(chatManager->currentChatName));
+
+
+        ui->MessageTextEdit->clear();
+    }
 }
 
 void MainWindow::on_RegisterUserButton_clicked()

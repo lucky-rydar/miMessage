@@ -5,6 +5,8 @@
 #include <QTcpSocket>
 #include <QtNetwork/QtNetwork>
 #include <QtCore>
+#include <message.h>
+#include <chat.h>
 
 class Client : public QObject
 {
@@ -14,7 +16,7 @@ public:
     void registerUser(QString username, QString password);
     void loginUser(QString username, QString password);
     void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
-    void sendMessageTo(QString messageText, QString chatName, QString chatOrGroup);
+    void sendMessageTo(Message message, Chat *chat);
 
     void onServerMessasge();
 
@@ -29,6 +31,7 @@ signals:
     void Logined(bool isLogined, QJsonObject received);
     void AddedNewChat(bool isAdded, QString chatOrGroupName, int chatId);
     void newMessage(QString chatName, QString text);
+    void messageSent(Message message);
 };
 
 #endif // CLIENT_H

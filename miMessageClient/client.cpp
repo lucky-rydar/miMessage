@@ -43,16 +43,16 @@ void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
 }
 
-void Client::sendMessageTo(QString messageText, QString chatName, QString chatOrGroup)
+void Client::sendMessageTo(Message message, Chat *chat)
 {
     QJsonObject toSend;
     toSend["username"] = this->username;
     toSend["password"] = this->password;
     toSend["message-type"] = "sending-message";
-    toSend["message-text"] = messageText;
-    toSend["chat-or-group"] = chatOrGroup;
-    toSend["chat-or-group-name"] = chatName;
-    toSend["date-time-string"] = QDateTime::currentDateTime().toString();
+    toSend["message-text"] = message.massageText;
+    toSend["chat-or-group"] = chat->chatOrGroup;
+    toSend["chat-or-group-name"] = chat->chatOrGroup;
+    toSend["sending-date-time"] = message.dateTime.toString();
     qDebug() << toSend;
 
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
@@ -84,6 +84,8 @@ void Client::onServerMessasge()
                 emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
             else if(obj["message-type"] == "new-message")
                 emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString());
+            else if(obj["message-type"] == "message-sent")
+                emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["message-id"].toInt()));
         }
 
     }
