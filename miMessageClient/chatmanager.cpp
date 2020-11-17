@@ -12,7 +12,14 @@ void ChatManager::addChat(Chat* chat)
 
 void ChatManager::removeChat(QString chatName)
 {
-
+    for(int i = 0; i < chatsList.size(); i++)
+    {
+        if(chatsList[i]->chatName == chatName)
+        {
+            chatsList.removeAt(i);
+            break;
+        }
+    }
 }
 
 void ChatManager::addMessageTo(QString chatName)
