@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtSql/QtSql>
 #include <chat.h>
+#include <message.h>
 
 class DatabaseController : public QObject
 {
@@ -18,7 +19,7 @@ public:
     bool addChat(QString username1, QString username2);
     int chatIdByName(QString chatName);
     QList<Chat> getChatsByUsername(QString username);
-    void addMessage(QString fromUser);
+    void addMessage(Message message);
 
     QString usernamesToChatName(QString username1, QString username2);
 
