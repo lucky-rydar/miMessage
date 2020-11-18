@@ -11,8 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     chatManager = new ChatManager(this);
 
     ui->FormsAndMainMenu->setCurrentIndex(0);
-    //ui->MessagesArea->setReadOnly(true);
-    //ui->MessagesArea->setAlignment(Qt::AlignBottom);
 
     connect(client, &Client::newMessage, this, &MainWindow::onNewMessage);
 }
@@ -204,6 +202,7 @@ void MainWindow::on_QuitButton_clicked()
         delete item;
     }
     ui->MessagesArea->clear();
+    ui->currentChatLabel->setText("-");
 }
 
 void MainWindow::onChatButtonClicked()
@@ -212,6 +211,9 @@ void MainWindow::onChatButtonClicked()
     this->chatManager->currentChatName = chatButton->text();
 
     ui->currentChatLabel->setText(this->chatManager->currentChatName);
+    client->getMessagesFor(chatManager->getChatByName(chatButton->text()));
+
+    connect(client, &Client::receivedMessagesList, this, &MainWindow::onReceivedMessagesList);
 
     UploadChat(chatButton->text());
 }
@@ -222,6 +224,24 @@ void MainWindow::onMessageSent(Message message)
 
     UploadChat(message.chatName);
     disconnect(client, &Client::messageSent, this, &MainWindow::onMessageSent);
+}
+
+void MainWindow::onReceivedMessagesList(QJsonObject messages)
+{
+    auto chat = chatManager->getChatByName(messages["chat-or-group-name"].toString());
+    chat->messages.clear();
+
+    auto messagesArray = messages["messages-list"].toArray();
+    for (int i = 0; i < messagesArray.size(); i++)
+    {
+        Message loadedMessage(messages["chat-or-group-name"].toString(), messagesArray.at(i)["message-text"].toString(),
+                        messagesArray.at(i)["from-user"].toString(), messagesArray.at(i)["message-id"].toInt());
+        loadedMessage.dateTime = QDateTime::fromString(messagesArray.at(i)["date-time"].toString());
+        chat->messages.push_back(loadedMessage);
+    }
+
+    UploadChat(messages["chat-or-group-name"].toString());
+    disconnect(client, &Client::receivedMessagesList, this, &MainWindow::onReceivedMessagesList);
 }
 
 void MainWindow::UploadChat(QString chatName)

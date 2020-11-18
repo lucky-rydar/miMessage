@@ -71,6 +71,20 @@ void Client::sendMessageTo(Message message, Chat *chat)
     serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
 }
 
+void Client::getMessagesFor(Chat *chat)
+{
+    QJsonObject toSend;
+    toSend["username"] = this->username;
+    toSend["password"] = this->password;
+    toSend["message-type"] = "messages-request";
+    toSend["chat-or-group"] = chat->chatOrGroup;
+    toSend["chat-or-group-name"] = chat->chatName;
+
+    qDebug() << toSend;
+
+    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+}
+
 void Client::onServerMessasge()
 {
     while(serverConnection->hasPendingDatagrams())
@@ -80,8 +94,6 @@ void Client::onServerMessasge()
         QHostAddress senderIP;
         quint16 senderPort;
         serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);
-
-        //qDebug() << buff;
 
         QJsonDocument doc = QJsonDocument::fromJson(buff);
         QJsonObject obj = doc.object();
@@ -99,6 +111,8 @@ void Client::onServerMessasge()
                 emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString()); // TODO: rewrite
             else if(obj["message-type"] == "sent-message-status")
                 emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
+            else if(obj["message-type"] == "message-list-for")
+                emit receivedMessagesList(obj);
         }
 
     }

@@ -68,6 +68,20 @@ QString DatabaseController::usernamesToChatName(QString username1, QString usern
     return chatName;
 }
 
+QList<QString> DatabaseController::usernamesFromChatName(QString chatName)
+{
+    std::regex rx("([A-Za-z0-9]+)-([A-Za-z0-9]+)");
+    std::string to_parse = chatName.toStdString();
+    std::smatch parsed;
+    std::regex_match(to_parse, parsed, rx);
+    QList<QString> result;
+
+    result.push_back(QString::fromStdString(parsed[1]));
+    result.push_back(QString::fromStdString(parsed[2]));
+
+    return result;
+}
+
 int DatabaseController::chatIdByName(QString chatName)
 {
     QSqlQuery getId("SELECT * FROM Chat WHERE chat_name = \'" + chatName  + "\'", connection);
@@ -116,5 +130,30 @@ void DatabaseController::addMessage(Message& message, QString fromUser, QString 
     }
 
 
+
+}
+
+QList<Message*> DatabaseController::getMessagesFor(QString chatOrGroupName, QString chatOrGroup)
+{
+    if(chatOrGroup == "chat")
+    {
+        QList<Message*> messages;
+
+        auto usernames = DatabaseController::usernamesFromChatName(chatOrGroupName);
+        QSqlQuery getMessages("SELECT * FROM Message WHERE from_user = '" + usernames[0] + "' AND to_user = '" + usernames[1] + "' OR from_user = '" + usernames[1] + "' AND to_user = '" +usernames[0] + "'", connection);
+        getMessages.exec();
+
+        while(getMessages.next())
+        {
+            Message *message = new Message(usernamesToChatName(getMessages.value(3).toString(), getMessages.value(4).toString()), getMessages.value(2).toString(), getMessages.value(1).toString(), getMessages.value(0).toInt());
+            message->from = getMessages.value(3).toString();
+            messages.append(message);
+        }
+        return messages;
+    }
+    else if(chatOrGroup == "group")
+    {
+        //TODO: add functionality for group too
+    }
 
 }

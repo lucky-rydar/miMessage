@@ -5,6 +5,9 @@
 #include <QtSql/QtSql>
 #include <chat.h>
 #include <message.h>
+#include <regex>
+
+using namespace std;
 
 class DatabaseController : public QObject
 {
@@ -20,9 +23,10 @@ public:
     int chatIdByName(QString chatName);
     QList<Chat> getChatsByUsername(QString username);
     void addMessage(Message& message, QString fromUser, QString toUser, QString chatOrGroup, QString chatOrGroupName);
+    QList<Message*> getMessagesFor(QString chatOrGroupName, QString chatOrGroup);
 
     QString usernamesToChatName(QString username1, QString username2);
-
+    static QList<QString> usernamesFromChatName(QString chatName);
 private:
 
 

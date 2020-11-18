@@ -105,6 +105,28 @@ void Server::onNewClientMessage()
             toSend["message-id"] = received.messageId;
             toSend["from-user"] = clientMessage["from-user"].toString();
         }
+        else if(clientMessage["message-type"] == "messages-request")
+        {
+            toSend["message-type"] = "message-list-for";
+            toSend["chat-or-group-name"] = clientMessage["chat-or-group-name"];
+
+            auto messages = dbController->getMessagesFor(clientMessage["chat-or-group-name"].toString(), clientMessage["chat-or-group"].toString());
+            //auto messages = dbController->getMessagesFor("admin-misha", "chat");
+            QJsonArray messagesJson;
+            for(int i = 0; i < messages.size(); i++)
+            {
+                QJsonObject message;
+                message["message-text"] = messages[i]->massageText;
+                message["from-user"] = messages[i]->from;
+                message["date-time"] = messages[i]->dateTime;
+                message["message-id"] = messages[i]->messageId;
+                messagesJson.append(message);
+
+
+                delete messages[i];
+            }
+            toSend["messages-list"] = messagesJson;
+        }
         toSend["username"] = clientMessage["username"];
 
         qInfo() << toSend;

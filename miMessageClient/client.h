@@ -18,6 +18,7 @@ public:
     void loginUser(QString username, QString password);
     void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
     void sendMessageTo(Message message, Chat *chat);
+    void getMessagesFor(Chat *chat);
 
     void onServerMessasge();
 
@@ -35,6 +36,7 @@ signals:
     void AddedNewChat(bool isAdded, QString chatOrGroupName, int chatId);
     void newMessage(QString chatName, QString text); // TODO: rewrite
     void messageSent(Message message);
+    void receivedMessagesList(QJsonObject messages);
 };
 
 #endif // CLIENT_H
