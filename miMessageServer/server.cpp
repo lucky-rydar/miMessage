@@ -17,8 +17,6 @@ void Server::run()
     }
 
     qInfo("Server started successfully...");
-
-    //TODO: do something if everything is fine
 }
 
 void Server::onNewClientMessage()
@@ -33,6 +31,7 @@ void Server::onNewClientMessage()
 
         QJsonObject clientMessage = QJsonDocument::fromJson(buff).object();
         QJsonObject toSend;
+        toSend["username"] = clientMessage["username"].toString();
 
         qDebug() << "new Message";
         qDebug() << clientMessage;
@@ -104,6 +103,11 @@ void Server::onNewClientMessage()
             toSend["message-text"] = clientMessage["message-text"].toString();
             toSend["message-id"] = received.messageId;
             toSend["from-user"] = clientMessage["from-user"].toString();
+            toSend["date-time"] = clientMessage["sending-date-time"].toString();
+
+            QJsonObject toSecondUser = toSend;
+            toSecondUser["username"] = clientMessage["to-user"].toString();
+            udpServer->writeDatagram(QJsonDocument(toSecondUser).toJson(), senderIP, 444);
         }
         else if(clientMessage["message-type"] == "messages-request")
         {

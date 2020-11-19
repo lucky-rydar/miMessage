@@ -7,7 +7,7 @@
 class Message
 {
 public:
-    Message(QString chatName, QString messageText = "", QString from = "", int messageId = -1);
+    Message(QString chatName, QString messageText = "", QString from = "", int messageId = -1, QDateTime dateTime = QDateTime::currentDateTime());
 
     int messageId;
     QDateTime dateTime;

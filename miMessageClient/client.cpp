@@ -108,7 +108,7 @@ void Client::onServerMessasge()
             else if(obj["message-type"] == "adding-chat-group-status")
                 emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
             else if(obj["message-type"] == "new-message")
-                emit newMessage(obj["chat-name"].toString(), obj["message-text"].toString()); // TODO: rewrite
+                emit newMessage(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt(), QDateTime::fromString(obj["date-time"].toString())));
             else if(obj["message-type"] == "sent-message-status")
                 emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
             else if(obj["message-type"] == "message-list-for")

@@ -135,6 +135,9 @@ void MainWindow::on_AddChat_clicked()
 void MainWindow::onNewMessage(Message message)
 {
     // here should be reaction on new message
+    chatManager->addMessage(message);
+    if(chatManager->currentChatName == message.chatName)
+        UploadChat(message.chatName);
 }
 
 void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)

@@ -34,7 +34,7 @@ signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);
     void AddedNewChat(bool isAdded, QString chatOrGroupName, int chatId);
-    void newMessage(QString chatName, QString text); // TODO: rewrite
+    void newMessage(Message message);
     void messageSent(Message message);
     void receivedMessagesList(QJsonObject messages);
 };
