@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include <QObject>
+#include <QMap>
 #include <QtNetwork/QtNetwork>
 #include <databasecontroller.h>
 
@@ -13,10 +14,14 @@ public:
     void run();
 
 private:
-    QUdpSocket* udpServer;
+    QTcpServer* sslServer;
     DatabaseController *dbController;
+    int port;
+    QList<QTcpSocket*> sockets;
 
     void onNewClientMessage();
+    void onNewConnection();
+
 signals:
 
 };

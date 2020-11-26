@@ -27,7 +27,7 @@ public:
     QString username;// these two variables must
     QString password;// be filled during logining
 private:
-    QUdpSocket *serverConnection;
+    QSslSocket *serverConnection;
     QHostAddress serverAddress;
     int serverPort;
 signals:

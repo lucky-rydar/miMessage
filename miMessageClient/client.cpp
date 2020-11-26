@@ -2,12 +2,14 @@
 
 Client::Client(QObject *parent) : QObject(parent)
 {
-    this->serverConnection = new QUdpSocket(this);
-    serverConnection->bind(QHostAddress::Any, 444); // here may need to use address from private
+    this->serverConnection = new QSslSocket(this);
 
     this->serverAddress = QHostAddress("127.0.0.1");
     this->serverPort = 333;
-    connect(serverConnection, &QTcpSocket::readyRead, this, &Client::onServerMessasge);
+
+    serverConnection->connectToHost(serverAddress, serverPort);
+    serverConnection->setProtocol(QSsl::TlsV1_2);
+    connect(serverConnection, &QSslSocket::readyRead, this, &Client::onServerMessasge);
 }
 
 void Client::registerUser(QString username, QString password)
@@ -17,7 +19,8 @@ void Client::registerUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::loginUser(QString username, QString password)
@@ -27,7 +30,8 @@ void Client::loginUser(QString username, QString password)
     toSend["username"] = username;
     toSend["password"] = password;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
@@ -40,7 +44,8 @@ void Client::addNewChatGroup(QString chatOrGroupName, QString chatOrGroup)
     toSend["chat-or-group-name"] = chatOrGroupName;
     qDebug() << toSend;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::sendMessageTo(Message message, Chat *chat)
@@ -68,7 +73,8 @@ void Client::sendMessageTo(Message message, Chat *chat)
 
     qDebug() << toSend;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::getMessagesFor(Chat *chat)
@@ -82,39 +88,36 @@ void Client::getMessagesFor(Chat *chat)
 
     qDebug() << toSend;
 
-    serverConnection->writeDatagram(QJsonDocument(toSend).toJson(), serverAddress, serverPort);
+    serverConnection->write(QJsonDocument(toSend).toJson());
+    serverConnection->flush();
 }
 
 void Client::onServerMessasge()
 {
-    while(serverConnection->hasPendingDatagrams())
+    /*buff.resize(serverConnection->pendingDatagramSize());
+    QHostAddress senderIP;
+    quint16 senderPort;
+    serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);*/
+    QByteArray buff = serverConnection->readAll();
+
+    QJsonDocument doc = QJsonDocument::fromJson(buff);
+    QJsonObject obj = doc.object();
+
+    if(obj["username"].toString() == this->username)
     {
-        QByteArray buff;
-        buff.resize(serverConnection->pendingDatagramSize());
-        QHostAddress senderIP;
-        quint16 senderPort;
-        serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);
-
-        QJsonDocument doc = QJsonDocument::fromJson(buff);
-        QJsonObject obj = doc.object();
-
-        if(obj["username"].toString() == this->username)
-        {
-            qDebug() << "Received message" << obj;
-            if(obj["message-type"] == "reg-status")
-                emit Registered(obj["registered"].toBool());
-            else if(obj["message-type"] == "login-status")
-                emit Logined(obj["logined"].toBool(), obj);
-            else if(obj["message-type"] == "adding-chat-group-status")
-                emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
-            else if(obj["message-type"] == "new-message")
-                emit newMessage(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt(), QDateTime::fromString(obj["date-time"].toString())));
-            else if(obj["message-type"] == "sent-message-status")
-                emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
-            else if(obj["message-type"] == "message-list-for")
-                emit receivedMessagesList(obj);
-        }
-
+        qDebug() << "Received message" << obj;
+        if(obj["message-type"] == "reg-status")
+            emit Registered(obj["registered"].toBool());
+        else if(obj["message-type"] == "login-status")
+            emit Logined(obj["logined"].toBool(), obj);
+        else if(obj["message-type"] == "adding-chat-group-status")
+            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
+        else if(obj["message-type"] == "new-message")
+            emit newMessage(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt(), QDateTime::fromString(obj["date-time"].toString())));
+        else if(obj["message-type"] == "sent-message-status")
+            emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
+        else if(obj["message-type"] == "message-list-for")
+            emit receivedMessagesList(obj);
     }
 
 
