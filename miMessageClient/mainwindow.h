@@ -43,6 +43,6 @@ private:
     QString *usernameToAdd;
     ChatManager *chatManager;
 
-    void addChatToList(QString chatName, int chatId);
+    void addChatToList(bool isAdded, QString chatOrGroupName, int chatId);
 };
 #endif // MAINWINDOW_H

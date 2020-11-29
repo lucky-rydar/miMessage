@@ -7,6 +7,7 @@ AddChatForm::AddChatForm(Client *client, QWidget *parent) :
 {
     this->client = client;
     ui->setupUi(this);
+
 }
 
 AddChatForm::~AddChatForm()
@@ -26,11 +27,11 @@ void AddChatForm::on_createChat_clicked()
         chatOrGroup = "chat";
 
     client->addNewChatGroup(ui->chatOrGroupNameEdit->text(), chatOrGroup);
-    connect(client, &Client::AddedNewChat, [=](bool isAdded, QString chatOrGroupName, int chatId){
+    /*connect(client, &Client::AddedNewChat, [=](bool isAdded, QString chatOrGroupName, int chatId){
         if(isAdded)
             emit this->newChat(chatOrGroupName, chatId);
 
-    });
-    //tell the user if chat added
+    });*/
+
     this->close();
 }

@@ -28,7 +28,7 @@ void Server::onNewClientMessage()
 
     QJsonObject clientMessage = QJsonDocument::fromJson(buff).object();
     QJsonObject toSend;
-    toSend["username"] = clientMessage["username"].toString();
+    //toSend["username"] = clientMessage["username"].toString();
 
     qDebug() << "new Message";
     qDebug() << clientMessage;
@@ -51,7 +51,7 @@ void Server::onNewClientMessage()
         toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
             //TODO: add the list of all chats too
         auto chatsList = dbController->getChatsByUsername(clientMessage["username"].toString());
-
+        this->socketByUsername[clientMessage["username"].toString()] = sock; // adding socket by username
 
         QJsonArray chatsInfo;
         for(int i = 0; i < chatsList.size(); i++)
@@ -63,6 +63,7 @@ void Server::onNewClientMessage()
             chatsInfo.append(chatInfo);
         }
         toSend["chats-info"] = chatsInfo;
+
 
         qInfo() << "logining";
     }
@@ -80,8 +81,17 @@ void Server::onNewClientMessage()
                 toSend["chat-or-group"] = "chat";
                 toSend["chat-or-group-name"] = chatName;
                 toSend["chat-id"] = dbController->chatIdByName(chatName);
-                }
             }
+            qInfo() << "===========================================================";
+            qInfo() << toSend;
+            if(socketByUsername[clientMessage["chat-or-group-name"].toString()] != nullptr)
+            {
+                socketByUsername[clientMessage["chat-or-group-name"].toString()]->write(QJsonDocument(toSend).toJson());
+                socketByUsername[clientMessage["chat-or-group-name"].toString()]->flush();
+            }
+
+
+        }
             else if(clientMessage["chat-or-group"] == "group")
             {
                 toSend["message-type"] = "adding-chat-group-status";
@@ -128,7 +138,7 @@ void Server::onNewClientMessage()
         }
         toSend["messages-list"] = messagesJson;
     }
-    toSend["username"] = clientMessage["username"];
+    //toSend["username"] = clientMessage["username"];
 
     qInfo() << toSend;
     sock->write(QJsonDocument(toSend).toJson());

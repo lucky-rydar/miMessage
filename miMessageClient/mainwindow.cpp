@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->FormsAndMainMenu->setCurrentIndex(0);
 
     connect(client, &Client::newMessage, this, &MainWindow::onNewMessage);
+    connect(client, &Client::AddedNewChat, this, &MainWindow::addChatToList);
 }
 
 MainWindow::~MainWindow()
@@ -125,8 +126,8 @@ void MainWindow::on_AddChat_clicked()
 {
     chatForm = new AddChatForm(client, this);
 
-    connect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
-
+    //connect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
+    //connect(client, &Client::AddedNewChat, this, &MainWindow::addChatToList);
     chatForm->show();
 
     return;
@@ -177,15 +178,20 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
     disconnect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
 }
 
-void MainWindow::addChatToList(QString chatName, int chatId)
+//void MainWindow::addChatToList(QString chatName, int chatId)
+void MainWindow::addChatToList(bool isAdded, QString chatOrGroupName, int chatId)
 {
-    QPushButton *tempButton = new QPushButton(chatName);
-    this->chatManager->addChat(new Chat(tempButton, chatId, chatName, "chat"));
-    ui->ChatButtonsList->addWidget(tempButton);
+    if(isAdded)
+    {
+        QPushButton *tempButton = new QPushButton(chatOrGroupName);
+        this->chatManager->addChat(new Chat(tempButton, chatId, chatOrGroupName, "chat"));
+        ui->ChatButtonsList->addWidget(tempButton);
 
-    connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
+        connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
 
-    disconnect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
+        //disconnect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
+    }
+
 }
 
 void MainWindow::on_QuitButton_clicked()

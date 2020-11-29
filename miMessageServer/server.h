@@ -18,6 +18,7 @@ private:
     DatabaseController *dbController;
     int port;
     QList<QTcpSocket*> sockets;
+    QMap<QString, QTcpSocket*> socketByUsername;
 
     void onNewClientMessage();
     void onNewConnection();

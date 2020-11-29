@@ -94,16 +94,12 @@ void Client::getMessagesFor(Chat *chat)
 
 void Client::onServerMessasge()
 {
-    /*buff.resize(serverConnection->pendingDatagramSize());
-    QHostAddress senderIP;
-    quint16 senderPort;
-    serverConnection->readDatagram(buff.data(), buff.size(), &senderIP, &senderPort);*/
     QByteArray buff = serverConnection->readAll();
 
     QJsonDocument doc = QJsonDocument::fromJson(buff);
     QJsonObject obj = doc.object();
 
-    if(obj["username"].toString() == this->username)
+    //if(obj["username"].toString() == this->username)
     {
         qDebug() << "Received message" << obj;
         if(obj["message-type"] == "reg-status")
