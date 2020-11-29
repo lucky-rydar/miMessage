@@ -126,8 +126,6 @@ void MainWindow::on_AddChat_clicked()
 {
     chatForm = new AddChatForm(client, this);
 
-    //connect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
-    //connect(client, &Client::AddedNewChat, this, &MainWindow::addChatToList);
     chatForm->show();
 
     return;
@@ -188,8 +186,6 @@ void MainWindow::addChatToList(bool isAdded, QString chatOrGroupName, int chatId
         ui->ChatButtonsList->addWidget(tempButton);
 
         connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
-
-        //disconnect(chatForm, &AddChatForm::newChat, this, &MainWindow::addChatToList);
     }
 
 }

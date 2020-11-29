@@ -27,11 +27,6 @@ void AddChatForm::on_createChat_clicked()
         chatOrGroup = "chat";
 
     client->addNewChatGroup(ui->chatOrGroupNameEdit->text(), chatOrGroup);
-    /*connect(client, &Client::AddedNewChat, [=](bool isAdded, QString chatOrGroupName, int chatId){
-        if(isAdded)
-            emit this->newChat(chatOrGroupName, chatId);
-
-    });*/
 
     this->close();
 }

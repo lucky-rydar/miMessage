@@ -82,8 +82,6 @@ void Server::onNewClientMessage()
                 toSend["chat-or-group-name"] = chatName;
                 toSend["chat-id"] = dbController->chatIdByName(chatName);
             }
-            qInfo() << "===========================================================";
-            qInfo() << toSend;
             if(socketByUsername[clientMessage["chat-or-group-name"].toString()] != nullptr)
             {
                 socketByUsername[clientMessage["chat-or-group-name"].toString()]->write(QJsonDocument(toSend).toJson());
