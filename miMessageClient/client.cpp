@@ -99,22 +99,21 @@ void Client::onServerMessasge()
     QJsonDocument doc = QJsonDocument::fromJson(buff);
     QJsonObject obj = doc.object();
 
-    //if(obj["username"].toString() == this->username)
-    {
-        qDebug() << "Received message" << obj;
-        if(obj["message-type"] == "reg-status")
-            emit Registered(obj["registered"].toBool());
-        else if(obj["message-type"] == "login-status")
+
+    qDebug() << "Received message" << obj;
+    if(obj["message-type"] == "reg-status")
+        emit Registered(obj["registered"].toBool());
+    else if(obj["message-type"] == "login-status")
             emit Logined(obj["logined"].toBool(), obj);
-        else if(obj["message-type"] == "adding-chat-group-status")
-            emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
-        else if(obj["message-type"] == "new-message")
-            emit newMessage(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt(), QDateTime::fromString(obj["date-time"].toString())));
-        else if(obj["message-type"] == "sent-message-status")
-            emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
-        else if(obj["message-type"] == "message-list-for")
-            emit receivedMessagesList(obj);
-    }
+    else if(obj["message-type"] == "adding-chat-group-status")
+        emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
+    else if(obj["message-type"] == "new-message")
+        emit newMessage(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt(), QDateTime::fromString(obj["date-time"].toString())));
+    else if(obj["message-type"] == "sent-message-status")
+        emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
+    else if(obj["message-type"] == "message-list-for")
+        emit receivedMessagesList(obj);
+
 
 
 }

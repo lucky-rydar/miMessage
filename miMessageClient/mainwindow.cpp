@@ -66,7 +66,7 @@ void MainWindow::on_RegisterUserButton_clicked()
     {
         ui->regInfoLabel->setText("Trying to register you...");
 
-        client->username = ui->regUsername->text(); //HERE!!!!
+        client->username = ui->regUsername->text();
 
         QPalette palette = ui->regInfoLabel->palette();
         palette.setColor(ui->regInfoLabel->foregroundRole(), QColor(0, 200, 0));
@@ -133,7 +133,6 @@ void MainWindow::on_AddChat_clicked()
 
 void MainWindow::onNewMessage(Message message)
 {
-    // here should be reaction on new message
     chatManager->addMessage(message);
     if(chatManager->currentChatName == message.chatName)
         UploadChat(message.chatName);
@@ -176,7 +175,6 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
     disconnect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
 }
 
-//void MainWindow::addChatToList(QString chatName, int chatId)
 void MainWindow::addChatToList(bool isAdded, QString chatOrGroupName, int chatId)
 {
     if(isAdded)

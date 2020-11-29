@@ -51,7 +51,7 @@ void Server::onNewClientMessage()
         toSend["logined"] = dbController->isRegistered(clientMessage["username"].toString(), QCryptographicHash::hash(clientMessage["password"].toString().toUtf8(), QCryptographicHash::Md5).toHex());
             //TODO: add the list of all chats too
         auto chatsList = dbController->getChatsByUsername(clientMessage["username"].toString());
-        this->socketByUsername[clientMessage["username"].toString()] = sock; // adding socket by username
+        this->socketByUsername[clientMessage["username"].toString()] = sock;
 
         QJsonArray chatsInfo;
         for(int i = 0; i < chatsList.size(); i++)
@@ -111,8 +111,11 @@ void Server::onNewClientMessage()
         toSend["date-time"] = clientMessage["sending-date-time"].toString();
 
         QJsonObject toSecondUser = toSend;
-        toSecondUser["username"] = clientMessage["to-user"].toString();
-        //udpServer->writeDatagram(QJsonDocument(toSecondUser).toJson(), senderIP, 444);// send message to to another socket from *list*
+        toSecondUser["message-type"] = "new-message";
+        qInfo() << "=================================";
+        qInfo() << toSecondUser;
+        this->socketByUsername[clientMessage["to-user"].toString()]->write(QJsonDocument(toSecondUser).toJson());
+        this->socketByUsername[clientMessage["to-user"].toString()]->flush();
     }
     else if(clientMessage["message-type"] == "messages-request")
     {
