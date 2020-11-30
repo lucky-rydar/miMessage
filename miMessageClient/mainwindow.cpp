@@ -16,6 +16,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(client, &Client::AddedNewChat, this, &MainWindow::addChatToList);
 
     notificationWin = new NotificationWin();
+    settingsMenu = new SettingsMenu(parent);
+
+    connect(settingsMenu, &SettingsMenu::styleChanged, [=](QString styleName){
+        QString path = ":/styles/" + styleName + ".qss";
+        QFile styleSheet(path);
+        styleSheet.open(QFile::ReadOnly);
+        this->setStyleSheet(styleSheet.readAll());
+    });
+    settingsMenu->callDefaultStyle();
 }
 
 MainWindow::~MainWindow()
@@ -275,7 +284,7 @@ void MainWindow::UploadChat(QString chatName)
 
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_SettingsButton_clicked()
 {
-
+    settingsMenu->show();
 }

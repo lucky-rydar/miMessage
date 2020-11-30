@@ -8,6 +8,7 @@
 #include <chatmanager.h>
 #include <message.h>
 #include <notificationwin.h>
+#include <settingsmenu.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,7 +37,8 @@ private slots:
     void onReceivedMessagesList(QJsonObject messages);
 
     void UploadChat(QString chatName);
-    void on_pushButton_5_clicked();
+
+    void on_SettingsButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -46,6 +48,7 @@ private:
 
     QString *usernameToAdd;
     ChatManager *chatManager;
+    SettingsMenu *settingsMenu;
 
     void addChatToList(bool isAdded, QString chatOrGroupName, int chatId);
 };

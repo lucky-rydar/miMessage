@@ -337,7 +337,7 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>131</width>
+                 <width>128</width>
                  <height>521</height>
                 </rect>
                </property>
@@ -376,14 +376,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_13">
               <item>
-               <widget class="QPushButton" name="pushButton_5">
+               <widget class="QPushButton" name="CallButton">
                 <property name="text">
                  <string>Call</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_4">
+               <widget class="QPushButton" name="VideocallButton">
                 <property name="text">
                  <string>VideoCall</string>
                 </property>
@@ -410,7 +410,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_2">
+               <widget class="QPushButton" name="SettingsButton">
                 <property name="text">
                  <string>Settings</string>
                 </property>

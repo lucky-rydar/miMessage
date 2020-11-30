@@ -16,7 +16,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     message.cpp \
-    notificationwin.cpp
+    notificationwin.cpp \
+    settingsmenu.cpp
 
 HEADERS += \
     addchatform.h \
@@ -25,11 +26,13 @@ HEADERS += \
     client.h \
     mainwindow.h \
     message.h \
-    notificationwin.h
+    notificationwin.h \
+    settingsmenu.h
 
 FORMS += \
     addchatform.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    settingsmenu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -37,3 +40,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 ANDROID_ABIS = armeabi-v7a
+
+RESOURCES += \
+    resources.qrc
