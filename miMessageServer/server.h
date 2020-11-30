@@ -17,8 +17,10 @@ private:
     QTcpServer* sslServer;
     DatabaseController *dbController;
     int port;
+
     QList<QTcpSocket*> sockets;
     QMap<QString, QTcpSocket*> socketByUsername;
+    QMap<QTcpSocket*, QString> usernameBySocket;
 
     void onNewClientMessage();
     void onNewConnection();

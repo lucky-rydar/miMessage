@@ -114,6 +114,11 @@ void Client::onServerMessasge()
         emit receivedMessagesList(obj);
 }
 
+void Client::disconectFromHost()
+{
+    this->serverConnection->disconnectFromHost();
+}
+
 QList<QString> Client::usernamesFromChatName(QString chatName)
 {
     std::regex rx("([A-Za-z0-9]+)-([A-Za-z0-9]+)");

@@ -52,6 +52,7 @@ void Server::onNewClientMessage()
             //TODO: add the list of all chats too
         auto chatsList = dbController->getChatsByUsername(clientMessage["username"].toString());
         this->socketByUsername[clientMessage["username"].toString()] = sock;
+        this->usernameBySocket[sock] = clientMessage["username"].toString();
 
         QJsonArray chatsInfo;
         for(int i = 0; i < chatsList.size(); i++)
@@ -158,6 +159,12 @@ void Server::onNewConnection()
     }
     this->sockets.push_back(tempSocket);
 
-
-    connect(tempSocket, &QSslSocket::readyRead, this, &Server::onNewClientMessage);
+    connect(tempSocket, &QTcpSocket::readyRead, this, &Server::onNewClientMessage);
+    connect(tempSocket, &QTcpSocket::disconnected, tempSocket, &QSslSocket::deleteLater);
+    connect(tempSocket, &QTcpSocket::disconnected, [=](){
+        this->sockets.removeOne(tempSocket);
+        this->socketByUsername.remove(usernameBySocket[tempSocket]);
+        this->usernameBySocket.remove(tempSocket);
+        qInfo() << "disconected";
+    });
 }

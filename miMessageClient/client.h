@@ -22,6 +22,8 @@ public:
 
     void onServerMessasge();
 
+    void disconectFromHost();
+
     static QList<QString> usernamesFromChatName(QString chatName);
 
     QString username;// these two variables must
