@@ -142,7 +142,7 @@ void MainWindow::onNewMessage(Message message)
 
     if(!this->isActiveWindow())
     {
-        notificationWin->setPopupText("[" + message.dateTime.toString("hh:mm") + "]<" + message.from + ">: \n" + message.massageText);
+        notificationWin->setPopupText("[" + message.dateTime.toString("hh:mm") + "]<" + message.from + ">: " + message.massageText);
         notificationWin->show();
     }
 }
@@ -216,7 +216,7 @@ void MainWindow::on_QuitButton_clicked()
     ui->MessagesArea->clear();
     ui->currentChatLabel->setText("-");
 
-    client->disconectFromHost();
+    //client->disconectFromHost();
 }
 
 void MainWindow::onChatButtonClicked()
