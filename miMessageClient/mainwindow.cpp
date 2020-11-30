@@ -215,8 +215,6 @@ void MainWindow::on_QuitButton_clicked()
     }
     ui->MessagesArea->clear();
     ui->currentChatLabel->setText("-");
-
-    //client->disconectFromHost();
 }
 
 void MainWindow::onChatButtonClicked()
