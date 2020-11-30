@@ -112,10 +112,11 @@ void Server::onNewClientMessage()
 
         QJsonObject toSecondUser = toSend;
         toSecondUser["message-type"] = "new-message";
-        qInfo() << "=================================";
-        qInfo() << toSecondUser;
-        this->socketByUsername[clientMessage["to-user"].toString()]->write(QJsonDocument(toSecondUser).toJson());
-        this->socketByUsername[clientMessage["to-user"].toString()]->flush();
+        if(socketByUsername[clientMessage["to-user"].toString()] != nullptr)
+        {
+            this->socketByUsername[clientMessage["to-user"].toString()]->write(QJsonDocument(toSecondUser).toJson());
+            this->socketByUsername[clientMessage["to-user"].toString()]->flush();
+        }
     }
     else if(clientMessage["message-type"] == "messages-request")
     {

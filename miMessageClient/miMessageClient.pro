@@ -15,7 +15,8 @@ SOURCES += \
     client.cpp \
     main.cpp \
     mainwindow.cpp \
-    message.cpp
+    message.cpp \
+    notificationwin.cpp
 
 HEADERS += \
     addchatform.h \
@@ -23,7 +24,8 @@ HEADERS += \
     chatmanager.h \
     client.h \
     mainwindow.h \
-    message.h
+    message.h \
+    notificationwin.h
 
 FORMS += \
     addchatform.ui \

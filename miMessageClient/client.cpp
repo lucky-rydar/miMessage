@@ -99,7 +99,6 @@ void Client::onServerMessasge()
     QJsonDocument doc = QJsonDocument::fromJson(buff);
     QJsonObject obj = doc.object();
 
-
     qDebug() << "Received message" << obj;
     if(obj["message-type"] == "reg-status")
         emit Registered(obj["registered"].toBool());
@@ -113,9 +112,6 @@ void Client::onServerMessasge()
         emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
     else if(obj["message-type"] == "message-list-for")
         emit receivedMessagesList(obj);
-
-
-
 }
 
 QList<QString> Client::usernamesFromChatName(QString chatName)

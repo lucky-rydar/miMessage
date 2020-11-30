@@ -14,12 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(client, &Client::newMessage, this, &MainWindow::onNewMessage);
     connect(client, &Client::AddedNewChat, this, &MainWindow::addChatToList);
+
+    notificationWin = new NotificationWin();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete usernameToAdd;
+    delete notificationWin;
 }
 
 void MainWindow::on_Registration_clicked()
@@ -136,6 +139,12 @@ void MainWindow::onNewMessage(Message message)
     chatManager->addMessage(message);
     if(chatManager->currentChatName == message.chatName)
         UploadChat(message.chatName);
+
+    if(!this->isActiveWindow())
+    {
+        notificationWin->setPopupText("[" + message.dateTime.toString("hh:mm") + "]<" + message.from + ">: \n" + message.massageText);
+        notificationWin->show();
+    }
 }
 
 void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
@@ -258,10 +267,15 @@ void MainWindow::UploadChat(QString chatName)
 
         for (int i = 0; i < chat->messages.size(); i++)
         {
-            QString formatedMessage = "[" + chat->messages[i].dateTime.toString("hh:mm:ss") + "] " + chat->messages[i].from + ": " + chat->messages[i].massageText + "\n";
+            QString formatedMessage = "[" + chat->messages[i].dateTime.toString("hh:mm:ss") + "]<" + chat->messages[i].from + ">: " + chat->messages[i].massageText + "\n";
             buff += formatedMessage;
         }
         ui->MessagesArea->setText(buff);
     }
+
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
 
 }
