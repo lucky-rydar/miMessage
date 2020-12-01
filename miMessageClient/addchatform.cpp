@@ -7,7 +7,7 @@ AddChatForm::AddChatForm(Client *client, QWidget *parent) :
 {
     this->client = client;
     ui->setupUi(this);
-
+    this->setWindowTitle("Add chat menu");
 }
 
 AddChatForm::~AddChatForm()

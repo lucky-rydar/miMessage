@@ -7,6 +7,8 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    this->setWindowTitle("Settings");
+
     connect(ui->saveButton, &QPushButton::clicked, this, &SettingsMenu::save);
     this->currentStyle = ui->currentTheme->currentText();
     this->notificationEnabled = true;

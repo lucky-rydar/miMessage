@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle("miMessage");
+
     client = new Client(this);
     usernameToAdd = new QString();
     chatManager = new ChatManager(this);
