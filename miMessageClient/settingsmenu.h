@@ -22,11 +22,11 @@ public:
     ~SettingsMenu();
 
     void callDefaultStyle();
-private:
-    Ui::SettingsMenu *ui;
 
     QString currentStyle;
     bool notificationEnabled;
+private:
+    Ui::SettingsMenu *ui;
 
     QFile *configFile;
 signals:

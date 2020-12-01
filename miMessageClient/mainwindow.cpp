@@ -149,9 +149,10 @@ void MainWindow::onNewMessage(Message message)
     if(chatManager->currentChatName == message.chatName)
         UploadChat(message.chatName);
 
-    if(!this->isActiveWindow())
+    if(!this->isActiveWindow() && settingsMenu->notificationEnabled)
     {
-        notificationWin->setPopupText("[" + message.dateTime.toString("hh:mm") + "]<" + message.from + ">: " + message.massageText);
+        notificationWin->setPopupText("[" + message.dateTime.toString("hh:mm:ss") + "]<" + message.from + ">: " + message.massageText);
+
         notificationWin->show();
     }
 }
