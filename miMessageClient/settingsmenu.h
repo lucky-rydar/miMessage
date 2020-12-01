@@ -27,11 +27,13 @@ public:
     bool notificationEnabled;
 private:
     Ui::SettingsMenu *ui;
-
     QFile *configFile;
+
+    void closeEvent(QCloseEvent *event) override;
+
 signals:
     void styleChanged(QString styleName);
-
+    void closed();
 private slots:
     void save();
     void upload();

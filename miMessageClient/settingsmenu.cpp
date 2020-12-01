@@ -9,7 +9,6 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
 
     this->setWindowTitle("Settings");
 
-    connect(ui->saveButton, &QPushButton::clicked, this, &SettingsMenu::save);
     this->currentStyle = ui->currentTheme->currentText();
     this->notificationEnabled = true;
 
@@ -22,10 +21,12 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
     connect(ui->currentTheme, &QComboBox::currentTextChanged, [=](QString currentText){
         this->currentStyle = currentText;
         emit this->styleChanged(currentText);
+        save();
     });
 
     connect(ui->notificationEnabled, &QCheckBox::stateChanged, [=](int state){
         this->notificationEnabled = state;
+        save();
     });
 
     connect(this, &SettingsMenu::styleChanged, [=](QString styleName){
@@ -34,6 +35,9 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
         styleSheet.open(QFile::ReadOnly);
         this->setStyleSheet(styleSheet.readAll());
     });
+
+    connect(this, &SettingsMenu::closed, this, &SettingsMenu::save);
+
 }
 
 SettingsMenu::~SettingsMenu()
@@ -44,6 +48,11 @@ SettingsMenu::~SettingsMenu()
 void SettingsMenu::callDefaultStyle()
 {
     emit this->styleChanged(currentStyle);
+}
+
+void SettingsMenu::closeEvent(QCloseEvent *event)
+{
+    emit closed();
 }
 
 void SettingsMenu::save()
