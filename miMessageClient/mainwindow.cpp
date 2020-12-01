@@ -286,5 +286,8 @@ void MainWindow::UploadChat(QString chatName)
 
 void MainWindow::on_SettingsButton_clicked()
 {
-    settingsMenu->show();
+    if(settingsMenu->isVisible())
+        settingsMenu->close();
+    else
+        settingsMenu->show();
 }
