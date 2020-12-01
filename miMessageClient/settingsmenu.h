@@ -4,7 +4,10 @@
 #include <QWidget>
 #include <QObject>
 #include <QFile>
+#include <QDebug>
 #include <QMainWindow>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 namespace Ui {
 class SettingsMenu;
@@ -25,9 +28,13 @@ private:
     QString currentStyle;
     bool notificationEnabled;
 
+    QFile *configFile;
 signals:
     void styleChanged(QString styleName);
 
+private slots:
+    void save();
+    void upload();
 };
 
 #endif // SETTINGSMENU_H

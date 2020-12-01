@@ -6,6 +6,15 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
     ui(new Ui::SettingsMenu)
 {
     ui->setupUi(this);
+
+    connect(ui->saveButton, &QPushButton::clicked, this, &SettingsMenu::save);
+    this->currentStyle = ui->currentTheme->currentText();
+    this->notificationEnabled = true;
+
+    configFile = new QFile("config.cfg", parent);
+    configFile->open(QFile::ReadWrite | QFile::Text);
+    upload();
+
     this->currentStyle = ui->currentTheme->currentText();
 
     connect(ui->currentTheme, &QComboBox::currentTextChanged, [=](QString currentText){
@@ -33,4 +42,30 @@ SettingsMenu::~SettingsMenu()
 void SettingsMenu::callDefaultStyle()
 {
     emit this->styleChanged(currentStyle);
+}
+
+void SettingsMenu::save()
+{
+    configFile->resize(0);
+    QJsonObject toSave;
+    toSave["current-style"] = this->currentStyle;
+    toSave["notifications-enabled"] = this->notificationEnabled;
+
+    QTextStream fileStream(configFile);
+    fileStream << QJsonDocument(toSave).toJson();
+}
+
+void SettingsMenu::upload()
+{
+    QByteArray cfgData = configFile->readAll();
+    if(!cfgData.isEmpty())
+    {
+        QJsonDocument doc = QJsonDocument::fromJson(cfgData);
+        QJsonObject saved = doc.object();
+
+        ui->currentTheme->setCurrentText(saved["current-style"].toString());
+        ui->notificationEnabled->setChecked(saved["notifications-enabled"].toBool());
+    }
+    else
+        save();
 }
