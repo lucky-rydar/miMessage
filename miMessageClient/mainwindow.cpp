@@ -194,7 +194,6 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
         ui->logUsername->clear();
     }
     ui->logInfoLabel->setPalette(palette);
-    this->chatManager->
     disconnect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
 }
 
