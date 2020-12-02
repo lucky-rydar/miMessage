@@ -176,6 +176,7 @@ void MainWindow::onLoginedUser(bool isLogined, QJsonObject obj)
             ui->ChatButtonsList->addWidget(tempButton);
             connect(tempButton, &QPushButton::clicked, this, &MainWindow::onChatButtonClicked);
         }
+        ui->currentUsernameLabel->setText(ui->logUsername->text());
 
         ui->logPassword->clear();
         ui->logUsername->clear();
