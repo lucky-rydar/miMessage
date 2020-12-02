@@ -8,6 +8,7 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
     ui->setupUi(this);
 
     this->setWindowTitle("Settings");
+    this->setWindowModality(Qt::ApplicationModal);
 
     this->currentStyle = ui->currentTheme->currentText();
     this->notificationEnabled = true;
