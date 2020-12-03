@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
         this->setStyleSheet(styleSheet.readAll());
     });
     settingsMenu->callDefaultStyle();
+
+    ui->dsconnectButton->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -294,4 +296,19 @@ void MainWindow::on_SettingsButton_clicked()
         settingsMenu->close();
     else
         settingsMenu->show();
+}
+
+void MainWindow::on_VideocallButton_clicked()
+{
+
+}
+
+void MainWindow::on_CallButton_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
 }

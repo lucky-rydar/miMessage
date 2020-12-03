@@ -412,6 +412,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="dsconnectButton">
+                <property name="text">
+                 <string>Disconect</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="currentChatLabel">
                 <property name="text">
                  <string>-</string>
