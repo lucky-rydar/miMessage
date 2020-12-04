@@ -9,6 +9,7 @@ SettingsMenu::SettingsMenu(QWidget *parent) :
 
     this->setWindowTitle("Settings");
     this->setWindowModality(Qt::ApplicationModal);
+    this->setWindowFlags(Qt::SubWindow);
 
     this->currentStyle = ui->currentTheme->currentText();
     this->notificationEnabled = true;
@@ -80,4 +81,9 @@ void SettingsMenu::upload()
     }
     else
         save();
+}
+
+void SettingsMenu::on_closeButton_clicked()
+{
+    this->close();
 }

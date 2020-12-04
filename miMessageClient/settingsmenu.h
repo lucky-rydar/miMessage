@@ -37,6 +37,7 @@ signals:
 private slots:
     void save();
     void upload();
+    void on_closeButton_clicked();
 };
 
 #endif // SETTINGSMENU_H
