@@ -7,17 +7,22 @@ Server::Server(QObject *parent) : QObject(parent)
     this->dbController = new DatabaseController(parent);
 
     connect(sslServer, &QTcpServer::newConnection, this, &Server::onNewConnection);
+
+    this->audioServer = new AudioServer(parent);
+    //dont forget to connect new server with functionality of main server
+
 }
 
 void Server::run()
 {
     if(!sslServer->listen(QHostAddress::Any, port))
     {
-        qCritical("Cant run the server");
+        qCritical("Cant run base server");
         return;
     }
+    qInfo("Base server started successfully...");
 
-    qInfo("Server started successfully...");
+    this->audioServer->run();
 }
 
 void Server::onNewClientMessage()
@@ -28,7 +33,6 @@ void Server::onNewClientMessage()
 
     QJsonObject clientMessage = QJsonDocument::fromJson(buff).object();
     QJsonObject toSend;
-    //toSend["username"] = clientMessage["username"].toString();
 
     qDebug() << "new Message";
     qDebug() << clientMessage;

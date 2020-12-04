@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QtNetwork/QtNetwork>
 #include <databasecontroller.h>
+#include <audioserver.h>
 
 class Server : public QObject
 {
@@ -15,6 +16,7 @@ public:
 
 private:
     QTcpServer* sslServer;
+    AudioServer *audioServer;
     DatabaseController *dbController;
     int port;
 
