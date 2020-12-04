@@ -308,7 +308,7 @@ void MainWindow::on_CallButton_clicked()
 
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_dsconnectButton_clicked()
 {
 
 }

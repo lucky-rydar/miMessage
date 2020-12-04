@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     addchatform.cpp \
+    callingmenu.cpp \
     chat.cpp \
     chatmanager.cpp \
     client.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     addchatform.h \
+    callingmenu.h \
     chat.h \
     chatmanager.h \
     client.h \
@@ -31,6 +33,7 @@ HEADERS += \
 
 FORMS += \
     addchatform.ui \
+    callingmenu.ui \
     mainwindow.ui \
     settingsmenu.ui
 
