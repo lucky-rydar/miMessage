@@ -412,9 +412,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="dsconnectButton">
+               <widget class="QPushButton" name="disconnectButton">
                 <property name="text">
-                 <string>Disconect</string>
+                 <string>Disconnect</string>
                 </property>
                </widget>
               </item>

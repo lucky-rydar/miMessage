@@ -19,6 +19,7 @@ public:
     void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
     void sendMessageTo(Message message, Chat *chat);
     void getMessagesFor(Chat *chat);
+    void makeAudioConnection(QString chatName, QString who);
 
     void onServerMessasge();
 
@@ -28,8 +29,11 @@ public:
 
     QString username;// these two variables must
     QString password;// be filled during logining
+
+    QTcpSocket *audioConnection;
 private:
     QSslSocket *serverConnection;
+
     QHostAddress serverAddress;
     int serverPort;
 signals:

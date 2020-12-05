@@ -21,9 +21,10 @@ private:
     void onNewConnection();
 
 signals:
-    void newCalling(QString toUsername);
+    void newCalling(QString toUsername, QString fromuser);
     void accepted(QString fromUser, QString forUser);
     void declined(QString fromUser, QString forUser);
+
 };
 
 #endif // AUDIOSERVER_H

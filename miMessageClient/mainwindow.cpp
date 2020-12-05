@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
     settingsMenu->callDefaultStyle();
 
-    ui->dsconnectButton->setVisible(false);
+    ui->disconnectButton->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -305,10 +305,7 @@ void MainWindow::on_VideocallButton_clicked()
 
 void MainWindow::on_CallButton_clicked()
 {
-
+    if(!chatManager->currentChatName.isEmpty())
+        client->makeAudioConnection(chatManager->currentChatName, client->username);
 }
 
-void MainWindow::on_dsconnectButton_clicked()
-{
-
-}

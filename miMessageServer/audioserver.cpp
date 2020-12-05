@@ -22,7 +22,11 @@ void AudioServer::onNewConnection()
 {
     QTcpSocket* sock = server->nextPendingConnection();
     sock->waitForReadyRead();
-    QJsonObject usersData = QJsonDocument::fromJson(sock->readAll()).object();
+
+    QByteArray buff;
+    buff = sock->readAll();
+    QJsonObject usersData = QJsonDocument::fromJson(buff).object();
+    qDebug() << usersData;
 
     if(usersData["i-am"].toString() == "calling-user")
     {
@@ -30,7 +34,8 @@ void AudioServer::onNewConnection()
         //TODO: send message to another user that we are calling to him/her (using signal of course)
 
 
-        emit newCalling(usersData["called-username"].toString());
+        emit newCalling(usersData["called-username"].toString(), usersData["calling-user"].toString());
+        qDebug() << "Connectected new calling user";
     }
     else if(usersData["i-am"].toString() == "called-user")
     {

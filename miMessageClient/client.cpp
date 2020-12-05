@@ -10,6 +10,9 @@ Client::Client(QObject *parent) : QObject(parent)
     serverConnection->connectToHost(serverAddress, serverPort);
     serverConnection->setProtocol(QSsl::TlsV1_2);
     connect(serverConnection, &QSslSocket::readyRead, this, &Client::onServerMessasge);
+
+    this->audioConnection = new QTcpSocket();
+
 }
 
 void Client::registerUser(QString username, QString password)
@@ -90,6 +93,29 @@ void Client::getMessagesFor(Chat *chat)
 
     serverConnection->write(QJsonDocument(toSend).toJson());
     serverConnection->flush();
+}
+
+void Client::makeAudioConnection(QString chatName, QString who)
+{
+    QString with;
+    auto usernames = Client::usernamesFromChatName(chatName);
+    if(usernames[0] == who)
+        with = usernames[1];
+    else
+        with = usernames[0];
+
+    this->audioConnection->connectToHost(this->serverAddress, 444);
+    this->audioConnection->waitForConnected();
+
+    QJsonObject toSend;
+    toSend["i-am"] = "calling-user";
+    toSend["calling-username"] = who;
+    toSend["called-username"] = with;
+
+    qDebug() << "toSend:" << toSend;
+
+    this->audioConnection->write(QJsonDocument(toSend).toJson());
+    this->audioConnection->flush();
 }
 
 void Client::onServerMessasge()

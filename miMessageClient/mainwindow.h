@@ -42,7 +42,6 @@ private slots:
     void on_SettingsButton_clicked();
     void on_VideocallButton_clicked();
     void on_CallButton_clicked();
-    void on_dsconnectButton_clicked();
 
 private:
     Ui::MainWindow *ui;
