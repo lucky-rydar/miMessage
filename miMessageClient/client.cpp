@@ -12,7 +12,7 @@ Client::Client(QObject *parent) : QObject(parent)
     connect(serverConnection, &QSslSocket::readyRead, this, &Client::onServerMessasge);
 
     this->audioConnection = new QTcpSocket();
-
+    connect(this, &Client::callingDeclined, [=](){ audioConnection->disconnectFromHost(); });
 }
 
 void Client::registerUser(QString username, QString password)
@@ -118,6 +118,23 @@ void Client::makeAudioConnection(QString chatName, QString who)
     this->audioConnection->flush();
 }
 
+void Client::callingAnswer(QString acceptOrDecline, QString answerFor)
+{
+    QJsonObject toSend;
+    toSend["i-am"] = "called-user";
+    toSend["accept-decline"] = acceptOrDecline;
+    toSend["calling-user"] = answerFor;
+
+    this->audioConnection->connectToHost(this->serverAddress, 444);
+    this->audioConnection->waitForConnected();
+
+    this->audioConnection->write(QJsonDocument(toSend).toJson());
+    this->audioConnection->flush();
+
+    if(acceptOrDecline == "decline")
+        this->audioConnection->disconnectFromHost();
+}
+
 void Client::onServerMessasge()
 {
     QByteArray buff = serverConnection->readAll();
@@ -140,6 +157,9 @@ void Client::onServerMessasge()
         emit receivedMessagesList(obj);
     else if(obj["message-type"] == "income-calling")
         emit incomeCalling(obj["from"].toString());
+    else if(obj["message-type"] == "calling-declined")
+        emit callingDeclined();
+
 
 }
 

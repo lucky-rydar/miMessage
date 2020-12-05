@@ -20,6 +20,7 @@ public:
     void sendMessageTo(Message message, Chat *chat);
     void getMessagesFor(Chat *chat);
     void makeAudioConnection(QString chatName, QString who);
+    void callingAnswer(QString acceptOrDecline, QString acceptFor);
 
     void onServerMessasge();
 
@@ -44,6 +45,7 @@ signals:
     void messageSent(Message message);
     void receivedMessagesList(QJsonObject messages);
     void incomeCalling(QString from);
+    void callingDeclined();
 };
 
 #endif // CLIENT_H

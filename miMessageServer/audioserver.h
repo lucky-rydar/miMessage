@@ -21,9 +21,9 @@ private:
     void onNewConnection();
 
 signals:
-    void newCalling(QString toUsername, QString fromuser);
+    void newCalling(QString toUser, QString fromUser);
     void accepted(QString fromUser, QString forUser);
-    void declined(QString fromUser, QString forUser);
+    void declined(QString fromUser);
 
 };
 

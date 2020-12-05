@@ -10,8 +10,15 @@ Server::Server(QObject *parent) : QObject(parent)
 
     this->audioServer = new AudioServer(parent);
     connect(audioServer, &AudioServer::newCalling, this, &Server::onCallingToSomeone);
-    //dont forget to connect new server with functionality of main server
-
+    connect(audioServer, &AudioServer::declined, [=](QString toUser){
+        QJsonObject toSend;
+        toSend["message-type"] = "calling-declined";
+        if(this->socketByUsername[toUser] != nullptr)
+        {
+            this->socketByUsername[toUser]->write(QJsonDocument(toSend).toJson());
+            this->socketByUsername[toUser]->flush();
+        }
+    });
 }
 
 void Server::run()
@@ -146,7 +153,6 @@ void Server::onNewClientMessage()
         }
         toSend["messages-list"] = messagesJson;
     }
-    //toSend["username"] = clientMessage["username"];
 
     qInfo() << toSend;
     sock->write(QJsonDocument(toSend).toJson());
@@ -180,6 +186,7 @@ void Server::onCallingToSomeone(QString to, QString from)
     toSend["message-type"] = "income-calling";
     toSend["from"] = from;
     toSend["to"] = to;
+    qDebug() << "onCallingToSomeone" << toSend;
     //may i forgot to add something to toSend
 
     if(this->socketByUsername[to] != nullptr)

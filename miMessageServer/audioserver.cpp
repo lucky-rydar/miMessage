@@ -21,7 +21,12 @@ void AudioServer::run()
 void AudioServer::onNewConnection()
 {
     QTcpSocket* sock = server->nextPendingConnection();
+    connect(sock, &QTcpSocket::disconnected, [=](){
+        qDebug() << "disconnected from audio server";
+    });
     sock->waitForReadyRead();
+
+    qDebug() << "New Audio connection";
 
     QByteArray buff;
     buff = sock->readAll();
@@ -34,22 +39,24 @@ void AudioServer::onNewConnection()
         //TODO: send message to another user that we are calling to him/her (using signal of course)
 
 
-        emit newCalling(usersData["called-username"].toString(), usersData["calling-user"].toString());
+        emit newCalling(usersData["called-username"].toString(), usersData["calling-username"].toString());
         qDebug() << "Connectected new calling user";
     }
     else if(usersData["i-am"].toString() == "called-user")
     {
-        //TODO: make accepting and declining
+
         if(usersData["accept-decline"].toString() == "accept")
         {
             //TODO: tell calling user that calling was accepted and make connection with another socket
-
+            qDebug() << "The calling was accepted";
             this->calling_users.remove(usersData["calling-user"].toString());
         }
-        else if(usersData["insert-decline"].toString() == "decline")
+        else if(usersData["accept-decline"].toString() == "decline")
         {
             //TODO: tell calling user to that another user declined calling
+            qInfo() << "Calling was declined and calling user diconnected";
 
+            emit declined(usersData["calling-user"].toString());
             this->calling_users.remove(usersData["calling-user"].toString());
         }
     }

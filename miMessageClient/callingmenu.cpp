@@ -35,11 +35,13 @@ void CallingMenu::setCallingUser(QString username)
 void CallingMenu::on_acceptCallingButton_clicked()
 {
     //send the message to server that you declined the calling
+    client->callingAnswer("accept", ui->usernameLabel->text());
     this->close();
 }
 
 void CallingMenu::on_declineCallingButton_clicked()
 {
     //send the message to server that you accepted the calling and emit signal for MainWindow to make new connection
+    client->callingAnswer("decline", ui->usernameLabel->text());
     this->close();
 }
