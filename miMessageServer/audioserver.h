@@ -16,11 +16,14 @@ public:
 private:
     QTcpServer* server;
     int port;
+    QMap<QString, QTcpSocket*> calling_users;
 
     void onNewConnection();
 
 signals:
-
+    void newCalling(QString toUsername);
+    void accepted(QString fromUser, QString forUser);
+    void declined(QString fromUser, QString forUser);
 };
 
 #endif // AUDIOSERVER_H

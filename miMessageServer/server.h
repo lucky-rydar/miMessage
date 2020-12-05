@@ -26,6 +26,7 @@ private:
 
     void onNewClientMessage();
     void onNewConnection();
+    void onCallingToSomeone(QString to, QString from);
 
 signals:
 

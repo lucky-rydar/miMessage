@@ -9,6 +9,7 @@ Server::Server(QObject *parent) : QObject(parent)
     connect(sslServer, &QTcpServer::newConnection, this, &Server::onNewConnection);
 
     this->audioServer = new AudioServer(parent);
+    connect(audioServer, &AudioServer::newCalling, this, &Server::onCallingToSomeone);
     //dont forget to connect new server with functionality of main server
 
 }
@@ -171,4 +172,19 @@ void Server::onNewConnection()
         this->usernameBySocket.remove(tempSocket);
         qInfo() << "disconected";
     });
+}
+
+void Server::onCallingToSomeone(QString to, QString from)
+{
+    QJsonObject toSend;
+    toSend["message-type"] = "income-calling";
+    toSend["from"] = from;
+    toSend["to"] = to;
+    //may i forgot to add something to toSend
+
+    if(this->socketByUsername[to] != nullptr)
+    {
+        this->socketByUsername[to]->write(QJsonDocument(toSend).toJson());
+        this->socketByUsername[to]->flush();
+    }
 }
