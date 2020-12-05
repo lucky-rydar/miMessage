@@ -129,7 +129,7 @@ void Client::onServerMessasge()
     if(obj["message-type"] == "reg-status")
         emit Registered(obj["registered"].toBool());
     else if(obj["message-type"] == "login-status")
-            emit Logined(obj["logined"].toBool(), obj);
+        emit Logined(obj["logined"].toBool(), obj);
     else if(obj["message-type"] == "adding-chat-group-status")
         emit AddedNewChat(obj["is-added"].toBool(), obj["chat-or-group-name"].toString(), obj["chat-id"].toInt());
     else if(obj["message-type"] == "new-message")
@@ -138,6 +138,9 @@ void Client::onServerMessasge()
         emit messageSent(Message(obj["chat-name"].toString(), obj["message-text"].toString(), obj["from-user"].toString(), obj["message-id"].toInt()));
     else if(obj["message-type"] == "message-list-for")
         emit receivedMessagesList(obj);
+    else if(obj["message-type"] == "income-calling")
+        emit incomeCalling(obj["from"].toString());
+
 }
 
 void Client::disconectFromHost()

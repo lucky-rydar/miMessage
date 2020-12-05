@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
     settingsMenu->callDefaultStyle();
 
     ui->disconnectButton->setVisible(false);
+
+    connect(client, &Client::incomeCalling, this, &MainWindow::onIncomeCalling);
 }
 
 MainWindow::~MainWindow()
@@ -269,6 +271,13 @@ void MainWindow::onReceivedMessagesList(QJsonObject messages)
 
     UploadChat(messages["chat-or-group-name"].toString());
     disconnect(client, &Client::receivedMessagesList, this, &MainWindow::onReceivedMessagesList);
+}
+
+void MainWindow::onIncomeCalling(QString from)
+{
+    CallingMenu *callingMenu = new CallingMenu(this);
+    callingMenu->setCallingUser(from);
+    callingMenu->show();
 }
 
 void MainWindow::UploadChat(QString chatName)

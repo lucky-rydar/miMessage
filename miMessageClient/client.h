@@ -43,6 +43,7 @@ signals:
     void newMessage(Message message);
     void messageSent(Message message);
     void receivedMessagesList(QJsonObject messages);
+    void incomeCalling(QString from);
 };
 
 #endif // CLIENT_H

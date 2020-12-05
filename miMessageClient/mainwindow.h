@@ -36,6 +36,7 @@ private slots:
     void onChatButtonClicked();
     void onMessageSent(Message message);
     void onReceivedMessagesList(QJsonObject messages);
+    void onIncomeCalling(QString from);
 
     void UploadChat(QString chatName);
 
