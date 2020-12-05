@@ -275,7 +275,7 @@ void MainWindow::onReceivedMessagesList(QJsonObject messages)
 
 void MainWindow::onIncomeCalling(QString from)
 {
-    CallingMenu *callingMenu = new CallingMenu(this);
+    CallingMenu *callingMenu = new CallingMenu(this->client, this);
     callingMenu->setCallingUser(from);
     callingMenu->show();
 }

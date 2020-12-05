@@ -1,7 +1,7 @@
 #include "callingmenu.h"
 #include "ui_callingmenu.h"
 
-CallingMenu::CallingMenu(QWidget *parent) :
+CallingMenu::CallingMenu(Client *client, QWidget *parent) :
     QWidget(nullptr), //<== bad practic but I have no idea how to fix this in another way
     ui(new Ui::CallingMenu)
 {
@@ -18,6 +18,8 @@ CallingMenu::CallingMenu(QWidget *parent) :
                                            "color: #FFF;");
     ui->declineCallingButton->setStyleSheet("background: tomato;"
                                             "color: #FFF;");
+
+    this->client = client;
 }
 
 CallingMenu::~CallingMenu()
