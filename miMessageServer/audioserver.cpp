@@ -49,7 +49,20 @@ void AudioServer::onNewConnection()
         {
             //TODO: tell calling user that calling was accepted and make connection with another socket
             qDebug() << "The calling was accepted";
-            this->calling_users.remove(usersData["calling-user"].toString());
+
+            connect(sock, &QTcpSocket::readyRead, [=](){
+                auto received = sock->readAll();
+                calling_users[usersData["calling-user"].toString()]->write(received);
+                calling_users[usersData["calling-user"].toString()]->flush();
+            });
+            connect(calling_users[usersData["calling-user"].toString()], &QTcpSocket::readyRead, [=](){
+                auto received = calling_users[usersData["calling-user"].toString()]->readAll();
+                sock->write(received);
+                sock->flush();
+            });
+            qDebug() << "two clients conneted";
+
+            //this->calling_users.remove(usersData["calling-user"].toString());
         }
         else if(usersData["accept-decline"].toString() == "decline")
         {
