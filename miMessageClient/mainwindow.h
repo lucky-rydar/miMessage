@@ -53,6 +53,7 @@ private:
     QString *usernameToAdd;
     ChatManager *chatManager;
     SettingsMenu *settingsMenu;
+    CallingMenu *callingMenu;
 
     void addChatToList(bool isAdded, QString chatOrGroupName, int chatId);
 };

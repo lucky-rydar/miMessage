@@ -13,6 +13,20 @@ Client::Client(QObject *parent) : QObject(parent)
 
     this->audioConnection = new QTcpSocket();
     connect(this, &Client::callingDeclined, [=](){ audioConnection->disconnectFromHost(); });
+
+    inputOutputFormat.setChannelCount(1);
+    inputOutputFormat.setSampleRate(8000);
+    inputOutputFormat.setSampleSize(8);
+    inputOutputFormat.setCodec("audio/pcm");
+    inputOutputFormat.setByteOrder(QAudioFormat::LittleEndian);
+    inputOutputFormat.setSampleType(QAudioFormat::UnSignedInt);
+
+    audioOutput = new QAudioOutput(inputOutputFormat, this);
+    audioInput = new QAudioInput(inputOutputFormat, this);
+
+    connect(this, &Client::callingAccepted, this, &Client::bindAudioFromMicro);
+    connect(this, &Client::callingAccepted, this, &Client::bindAudioFromSocket);
+
 }
 
 void Client::registerUser(QString username, QString password)
@@ -159,6 +173,8 @@ void Client::onServerMessasge()
         emit incomeCalling(obj["from"].toString());
     else if(obj["message-type"] == "calling-declined")
         emit callingDeclined();
+    else if(obj["message-type"] == "calling-accepted")
+        emit callingAccepted();
 
 
 }
@@ -180,4 +196,24 @@ QList<QString> Client::usernamesFromChatName(QString chatName)
     result.push_back(QString::fromStdString(parsed[2]));
 
     return result;
+}
+
+void Client::bindAudioFromMicro()
+{
+    audioInput->setBufferSize(16384);
+    audioInput->start(audioConnection);
+    qDebug() << "Binded audio input on socket";
+}
+
+void Client::bindAudioFromSocket()
+{
+    audioOutput->setBufferSize(16384);
+    qDebug() << "Binded audio output on socket";
+    connect(audioConnection, &QTcpSocket::readyRead, [=](){
+        QByteArray *data = new QByteArray();
+        *data = audioConnection->readAll();
+        QBuffer *buffer = new QBuffer(data, this);
+        buffer->open(QIODevice::ReadOnly);
+        audioOutput->start(buffer);
+    });
 }

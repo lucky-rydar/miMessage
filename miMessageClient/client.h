@@ -8,6 +8,9 @@
 #include <message.h>
 #include <chat.h>
 #include <regex>
+#include <QAudioFormat>
+#include <QAudioInput>
+#include <QAudioOutput>
 
 class Client : public QObject
 {
@@ -37,6 +40,10 @@ private:
 
     QHostAddress serverAddress;
     int serverPort;
+
+    QAudioFormat inputOutputFormat;
+    QAudioInput *audioInput;
+    QAudioOutput *audioOutput;
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);
@@ -46,6 +53,11 @@ signals:
     void receivedMessagesList(QJsonObject messages);
     void incomeCalling(QString from);
     void callingDeclined();
+    void callingAccepted();
+
+public slots:
+    void bindAudioFromMicro();
+    void bindAudioFromSocket();
 };
 
 #endif // CLIENT_H

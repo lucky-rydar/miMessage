@@ -54,14 +54,16 @@ void AudioServer::onNewConnection()
                 auto received = sock->readAll();
                 calling_users[usersData["calling-user"].toString()]->write(received);
                 calling_users[usersData["calling-user"].toString()]->flush();
+                //qDebug() << "sent user 1";
             });
             connect(calling_users[usersData["calling-user"].toString()], &QTcpSocket::readyRead, [=](){
                 auto received = calling_users[usersData["calling-user"].toString()]->readAll();
                 sock->write(received);
                 sock->flush();
+                //qDebug() << "sent user 2";
             });
             emit this->accepted(usersData["calling-user"].toString());
-            qDebug() << "two clients conneted";
+            qDebug() << "two clients connected";
 
             //this->calling_users.remove(usersData["calling-user"].toString());
         }

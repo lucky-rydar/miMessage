@@ -32,6 +32,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->disconnectButton->setVisible(false);
 
     connect(client, &Client::incomeCalling, this, &MainWindow::onIncomeCalling);
+
+    callingMenu = new CallingMenu(this->client, this);
+
+    connect(callingMenu, &CallingMenu::acceptedButtonPressed, client, &Client::bindAudioFromMicro);
+    connect(callingMenu, &CallingMenu::acceptedButtonPressed, client, &Client::bindAudioFromSocket);
 }
 
 MainWindow::~MainWindow()
@@ -275,7 +280,6 @@ void MainWindow::onReceivedMessagesList(QJsonObject messages)
 
 void MainWindow::onIncomeCalling(QString from)
 {
-    CallingMenu *callingMenu = new CallingMenu(this->client, this);
     callingMenu->setCallingUser(from);
     callingMenu->show();
 }

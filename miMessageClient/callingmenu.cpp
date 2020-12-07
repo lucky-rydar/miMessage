@@ -7,7 +7,7 @@ CallingMenu::CallingMenu(Client *client, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setAttribute(Qt::WA_DeleteOnClose);
+    //this->setAttribute(Qt::WA_DeleteOnClose);
     this->setWindowModality(Qt::ApplicationModal);
     this->setWindowFlags(Qt::SubWindow);
 
@@ -36,6 +36,7 @@ void CallingMenu::on_acceptCallingButton_clicked()
 {
     //send the message to server that you declined the calling
     client->callingAnswer("accept", ui->usernameLabel->text());
+    emit this->acceptedButtonPressed();
     this->close();
 }
 

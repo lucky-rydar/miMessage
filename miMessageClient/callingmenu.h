@@ -26,6 +26,10 @@ private slots:
 private:
     Ui::CallingMenu *ui;
     Client* client;
+
+signals:
+    void acceptedButtonPressed();
+
 };
 
 #endif // CALLINGMENU_H
