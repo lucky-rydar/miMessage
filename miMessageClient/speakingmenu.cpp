@@ -43,11 +43,13 @@ void SpeakingMenu::on_microModeButton_clicked()
     {
         this->audioSender->suspend();
         this->isMicroOn = false;
+        ui->microModeButton->setText("Turn on micro");
     }
     else
     {
         this->audioSender->resume();
         this->isMicroOn = true;
+        ui->microModeButton->setText("Turn off micro");
     }
 }
 
