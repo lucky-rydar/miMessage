@@ -60,6 +60,7 @@ void AudioServer::onNewConnection()
                 sock->write(received);
                 sock->flush();
             });
+            emit this->accepted(usersData["calling-user"].toString());
             qDebug() << "two clients conneted";
 
             //this->calling_users.remove(usersData["calling-user"].toString());

@@ -19,6 +19,15 @@ Server::Server(QObject *parent) : QObject(parent)
             this->socketByUsername[toUser]->flush();
         }
     });
+    connect(audioServer, &AudioServer::accepted, [=](QString toUser){
+        QJsonObject toSend;
+        toSend["message-type"] = "calling-accepted";
+        if(this->socketByUsername[toUser] != nullptr)
+        {
+            this->socketByUsername[toUser]->write(QJsonDocument(toSend).toJson());
+            this->socketByUsername[toUser]->flush();
+        }
+    });
 }
 
 void Server::run()

@@ -22,7 +22,7 @@ private:
 
 signals:
     void newCalling(QString toUser, QString fromUser);
-    void accepted(QString fromUser, QString forUser);
+    void accepted(QString fromUser);
     void declined(QString fromUser);
 
 };
