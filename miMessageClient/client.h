@@ -34,7 +34,12 @@ public:
     QString username;// these two variables must
     QString password;// be filled during logining
 
+    QString speakingWith;
+
     QTcpSocket *audioConnection;
+
+    QAudioInput *audioInput;
+    QAudioOutput *audioOutput;
 private:
     QSslSocket *serverConnection;
 
@@ -42,8 +47,7 @@ private:
     int serverPort;
 
     QAudioFormat inputOutputFormat;
-    QAudioInput *audioInput;
-    QAudioOutput *audioOutput;
+
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);
@@ -58,6 +62,7 @@ signals:
 public slots:
     void bindAudioFromMicro();
     void bindAudioFromSocket();
+    void stopAudio();
 };
 
 #endif // CLIENT_H

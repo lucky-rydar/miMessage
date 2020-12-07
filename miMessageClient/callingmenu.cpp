@@ -30,6 +30,7 @@ CallingMenu::~CallingMenu()
 void CallingMenu::setCallingUser(QString username)
 {
     ui->usernameLabel->setText(username);
+    this->username = username;
 }
 
 void CallingMenu::on_acceptCallingButton_clicked()

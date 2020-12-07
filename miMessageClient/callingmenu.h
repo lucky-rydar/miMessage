@@ -18,7 +18,7 @@ public:
     ~CallingMenu();
 
     void setCallingUser(QString username);
-
+    QString username;
 private slots:
     void on_acceptCallingButton_clicked();
     void on_declineCallingButton_clicked();

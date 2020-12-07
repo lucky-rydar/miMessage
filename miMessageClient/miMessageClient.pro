@@ -18,7 +18,8 @@ SOURCES += \
     mainwindow.cpp \
     message.cpp \
     notificationwin.cpp \
-    settingsmenu.cpp
+    settingsmenu.cpp \
+    speakingmenu.cpp
 
 HEADERS += \
     addchatform.h \
@@ -29,13 +30,15 @@ HEADERS += \
     mainwindow.h \
     message.h \
     notificationwin.h \
-    settingsmenu.h
+    settingsmenu.h \
+    speakingmenu.h
 
 FORMS += \
     addchatform.ui \
     callingmenu.ui \
     mainwindow.ui \
-    settingsmenu.ui
+    settingsmenu.ui \
+    speakingmenu.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

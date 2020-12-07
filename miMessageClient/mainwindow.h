@@ -10,6 +10,7 @@
 #include <notificationwin.h>
 #include <settingsmenu.h>
 #include <callingmenu.h>
+#include <speakingmenu.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

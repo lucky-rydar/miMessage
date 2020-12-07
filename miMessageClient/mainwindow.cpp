@@ -37,6 +37,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(callingMenu, &CallingMenu::acceptedButtonPressed, client, &Client::bindAudioFromMicro);
     connect(callingMenu, &CallingMenu::acceptedButtonPressed, client, &Client::bindAudioFromSocket);
+
+    connect(callingMenu, &CallingMenu::acceptedButtonPressed, [=](){
+        auto a = new SpeakingMenu(client->audioInput, callingMenu->username, this);
+        connect(a, &SpeakingMenu::endCall, [=](){
+            client->audioConnection->disconnect();
+            client->stopAudio();
+        });
+        a->show();
+    });
+
+    connect(client, &Client::callingAccepted, [=](){
+        auto a = new SpeakingMenu(client->audioInput, client->speakingWith, this);
+        connect(a, &SpeakingMenu::endCall, [=](){
+            client->audioConnection->disconnect();
+            client->stopAudio();
+        });
+        a->show();
+    });
+
 }
 
 MainWindow::~MainWindow()
@@ -311,7 +330,7 @@ void MainWindow::on_SettingsButton_clicked()
         settingsMenu->show();
 }
 
-void MainWindow::on_VideocallButton_clicked()
+void MainWindow::on_VideocallButton_clicked() // this body replace
 {
 
 }

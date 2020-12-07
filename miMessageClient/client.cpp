@@ -125,6 +125,7 @@ void Client::makeAudioConnection(QString chatName, QString who)
     toSend["i-am"] = "calling-user";
     toSend["calling-username"] = who;
     toSend["called-username"] = with;
+    this->speakingWith = with;
 
     qDebug() << "toSend:" << toSend;
 
@@ -216,4 +217,10 @@ void Client::bindAudioFromSocket()
         buffer->open(QIODevice::ReadOnly);
         audioOutput->start(buffer);
     });
+}
+
+void Client::stopAudio()
+{
+    audioInput->stop();
+    audioOutput->stop();
 }
