@@ -29,8 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
     settingsMenu->callDefaultStyle();
 
-    ui->disconnectButton->setVisible(false);
-
     connect(client, &Client::incomeCalling, this, &MainWindow::onIncomeCalling);
 
     callingMenu = new CallingMenu(this->client, this);

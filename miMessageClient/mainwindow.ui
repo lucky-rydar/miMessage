@@ -325,7 +325,7 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <widget class="QWidget" name="">
+          <widget class="QWidget" name="layoutWidget">
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_15">
@@ -357,7 +357,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>174</width>
+                   <width>108</width>
                    <height>498</height>
                   </rect>
                  </property>
@@ -408,13 +408,6 @@
                <widget class="QPushButton" name="VideocallButton">
                 <property name="text">
                  <string>VideoCall</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="disconnectButton">
-                <property name="text">
-                 <string>Disconnect</string>
                 </property>
                </widget>
               </item>
