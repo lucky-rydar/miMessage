@@ -25,6 +25,9 @@ SpeakingMenu::SpeakingMenu(QAudioInput *audioSender, QString username, Client* c
     this->isMicroOn = true;
 
     this->client = client;
+
+    ui->endCall->setStyleSheet("background: tomato;"
+                               "color: #FFF;");
 }
 
 SpeakingMenu::~SpeakingMenu()
