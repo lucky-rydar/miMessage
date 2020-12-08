@@ -38,7 +38,6 @@ void AudioServer::onNewConnection()
         this->calling_users.insert(usersData["calling-username"].toString(), sock);
         //TODO: send message to another user that we are calling to him/her (using signal of course)
 
-
         emit newCalling(usersData["called-username"].toString(), usersData["calling-username"].toString());
         qDebug() << "Connectected new calling user";
     }
@@ -47,25 +46,41 @@ void AudioServer::onNewConnection()
 
         if(usersData["accept-decline"].toString() == "accept")
         {
-            //TODO: tell calling user that calling was accepted and make connection with another socket
             qDebug() << "The calling was accepted";
+
+            emit this->accepted(usersData["calling-user"].toString());
+
+            this->alreadyConnectedByUsername.insert(usersData["calling-user"].toString(), calling_users[usersData["calling-user"].toString()]);
+            this->alreadyConnectedByUsername.insert(usersData["called-user"].toString(), sock);
+            this->calling_users.remove(usersData["calling-user"].toString());
+
+            connect(this->alreadyConnectedByUsername[usersData["calling-user"].toString()], &QTcpSocket::disconnected, [=](){
+                this->alreadyConnectedByUsername.remove(usersData["calling-user"].toString());
+
+                if(this->alreadyConnectedByUsername.contains(usersData["called-user"].toString()))
+                    emit this->disconnected(usersData["called-user"].toString());
+            });
+
+            connect(this->alreadyConnectedByUsername[usersData["called-user"].toString()], &QTcpSocket::disconnected, [=](){
+                this->alreadyConnectedByUsername.remove(usersData["called-user"].toString());
+
+                if(this->alreadyConnectedByUsername.contains(usersData["calling-user"].toString()))
+                    emit this->disconnected(usersData["calling-user"].toString());
+            });
 
             connect(sock, &QTcpSocket::readyRead, [=](){
                 auto received = sock->readAll();
-                calling_users[usersData["calling-user"].toString()]->write(received);
-                calling_users[usersData["calling-user"].toString()]->flush();
-                //qDebug() << "sent user 1";
+                this->alreadyConnectedByUsername[usersData["calling-user"].toString()]->write(received);
+                this->alreadyConnectedByUsername[usersData["calling-user"].toString()]->flush();
             });
-            connect(calling_users[usersData["calling-user"].toString()], &QTcpSocket::readyRead, [=](){
-                auto received = calling_users[usersData["calling-user"].toString()]->readAll();
+
+            connect(this->alreadyConnectedByUsername[usersData["calling-user"].toString()], &QTcpSocket::readyRead, [=](){
+                auto received = this->alreadyConnectedByUsername[usersData["calling-user"].toString()]->readAll();
                 sock->write(received);
                 sock->flush();
-                //qDebug() << "sent user 2";
             });
-            emit this->accepted(usersData["calling-user"].toString());
-            qDebug() << "two clients connected";
 
-            //this->calling_users.remove(usersData["calling-user"].toString());
+            qDebug() << "two clients connected";
         }
         else if(usersData["accept-decline"].toString() == "decline")
         {

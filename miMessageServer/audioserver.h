@@ -17,13 +17,16 @@ private:
     QTcpServer* server;
     int port;
     QMap<QString, QTcpSocket*> calling_users;
+    QMap<QString, QTcpSocket*> alreadyConnectedByUsername;
 
+private slots:
     void onNewConnection();
 
 signals:
     void newCalling(QString toUser, QString fromUser);
     void accepted(QString fromUser);
     void declined(QString fromUser);
+    void disconnected(QString sendTo);
 
 };
 

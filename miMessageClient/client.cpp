@@ -7,6 +7,8 @@ Client::Client(QObject *parent) : QObject(parent)
     this->serverAddress = QHostAddress("127.0.0.1");
     this->serverPort = 333;
 
+    audioBufferSize = 65536; // value in bytes
+
     serverConnection->connectToHost(serverAddress, serverPort);
     serverConnection->setProtocol(QSsl::TlsV1_2);
     connect(serverConnection, &QSslSocket::readyRead, this, &Client::onServerMessasge);
@@ -15,7 +17,7 @@ Client::Client(QObject *parent) : QObject(parent)
     connect(this, &Client::callingDeclined, [=](){ audioConnection->disconnectFromHost(); });
 
     inputOutputFormat.setChannelCount(1);
-    inputOutputFormat.setSampleRate(8000);
+    inputOutputFormat.setSampleRate(16000);
     inputOutputFormat.setSampleSize(8);
     inputOutputFormat.setCodec("audio/pcm");
     inputOutputFormat.setByteOrder(QAudioFormat::LittleEndian);
@@ -26,6 +28,10 @@ Client::Client(QObject *parent) : QObject(parent)
 
     connect(this, &Client::callingAccepted, this, &Client::bindAudioFromMicro);
     connect(this, &Client::callingAccepted, this, &Client::bindAudioFromSocket);
+
+    connect(this, &Client::callingEnd, [=](){this->audioConnection->disconnect();
+        qDebug() << "it is calling end";
+    });
 
 }
 
@@ -139,6 +145,7 @@ void Client::callingAnswer(QString acceptOrDecline, QString answerFor)
     toSend["i-am"] = "called-user";
     toSend["accept-decline"] = acceptOrDecline;
     toSend["calling-user"] = answerFor;
+    toSend["called-user"] = username;
 
     this->audioConnection->connectToHost(this->serverAddress, 444);
     this->audioConnection->waitForConnected();
@@ -176,7 +183,8 @@ void Client::onServerMessasge()
         emit callingDeclined();
     else if(obj["message-type"] == "calling-accepted")
         emit callingAccepted();
-
+    else if(obj["message-type"] == "calling-end")
+        emit callingEnd();
 
 }
 
@@ -201,14 +209,14 @@ QList<QString> Client::usernamesFromChatName(QString chatName)
 
 void Client::bindAudioFromMicro()
 {
-    audioInput->setBufferSize(16384);
+    audioInput->setBufferSize(audioBufferSize);
     audioInput->start(audioConnection);
     qDebug() << "Binded audio input on socket";
 }
 
 void Client::bindAudioFromSocket()
 {
-    audioOutput->setBufferSize(16384);
+    audioOutput->setBufferSize(audioBufferSize);
     qDebug() << "Binded audio output on socket";
     connect(audioConnection, &QTcpSocket::readyRead, [=](){
         QByteArray *data = new QByteArray();

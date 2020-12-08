@@ -55,7 +55,7 @@ private:
     ChatManager *chatManager;
     SettingsMenu *settingsMenu;
     CallingMenu *callingMenu;
-
+    SpeakingMenu* speakingMenu;
     void addChatToList(bool isAdded, QString chatOrGroupName, int chatId);
 };
 #endif // MAINWINDOW_H

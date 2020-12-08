@@ -1,7 +1,7 @@
 #include "speakingmenu.h"
 #include "ui_speakingmenu.h"
 
-SpeakingMenu::SpeakingMenu(QAudioInput *audioSender, QString username, QWidget *parent) :
+SpeakingMenu::SpeakingMenu(QAudioInput *audioSender, QString username, Client* client, QWidget *parent) :
     QWidget(nullptr), //nullptr because window delets itself after closing
     ui(new Ui::SpeakingMenu)
 {
@@ -23,6 +23,8 @@ SpeakingMenu::SpeakingMenu(QAudioInput *audioSender, QString username, QWidget *
     ui->username->setText(username);
 
     this->isMicroOn = true;
+
+    this->client = client;
 }
 
 SpeakingMenu::~SpeakingMenu()
@@ -33,6 +35,7 @@ SpeakingMenu::~SpeakingMenu()
 void SpeakingMenu::on_endCall_clicked()
 {
     //emit slot that will disconnect audio socket in MainWindow
+    client->audioConnection->disconnectFromHost();
     emit endCall();
     this->close();
 }

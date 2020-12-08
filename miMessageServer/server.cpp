@@ -28,6 +28,8 @@ Server::Server(QObject *parent) : QObject(parent)
             this->socketByUsername[toUser]->flush();
         }
     });
+
+    connect(this->audioServer, &AudioServer::disconnected, this, &Server::onCallingEnds);
 }
 
 void Server::run()
@@ -203,6 +205,19 @@ void Server::onCallingToSomeone(QString to, QString from)
         this->socketByUsername[to]->write(QJsonDocument(toSend).toJson());
         this->socketByUsername[to]->flush();
     }
+}
+
+void Server::onCallingEnds(QString to)
+{
+    QJsonObject toSend;
+    toSend["message-type"] = "calling-end";
+
+    if(this->socketByUsername[to] != nullptr)
+    {
+        this->socketByUsername[to]->write(QJsonDocument(toSend).toJson());
+        this->socketByUsername[to]->flush();
+    }
+    qDebug() << "sent calling ended to another user"; ///CLEAR
 }
 
 

@@ -39,23 +39,26 @@ MainWindow::MainWindow(QWidget *parent)
     connect(callingMenu, &CallingMenu::acceptedButtonPressed, client, &Client::bindAudioFromSocket);
 
     connect(callingMenu, &CallingMenu::acceptedButtonPressed, [=](){
-        auto a = new SpeakingMenu(client->audioInput, callingMenu->username, this);
-        connect(a, &SpeakingMenu::endCall, [=](){
+        this->speakingMenu = new SpeakingMenu(client->audioInput, callingMenu->username, client, this);
+        connect(this->speakingMenu, &SpeakingMenu::endCall, [=](){
             client->audioConnection->disconnect();
             client->stopAudio();
         });
-        a->show();
+        this->speakingMenu->show();
     });
 
     connect(client, &Client::callingAccepted, [=](){
-        auto a = new SpeakingMenu(client->audioInput, client->speakingWith, this);
-        connect(a, &SpeakingMenu::endCall, [=](){
+        this->speakingMenu = new SpeakingMenu(client->audioInput, client->speakingWith, client, this);
+        connect(this->speakingMenu, &SpeakingMenu::endCall, [=](){
             client->audioConnection->disconnect();
             client->stopAudio();
         });
-        a->show();
+        this->speakingMenu->show();
     });
-
+    connect(client, &Client::callingEnd, [=](){
+        this->client->audioConnection->disconnectFromHost();
+        this->speakingMenu->close();
+    });
 }
 
 MainWindow::~MainWindow()

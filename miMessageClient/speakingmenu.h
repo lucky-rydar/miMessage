@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAudioInput>
+#include <client.h>
 
 namespace Ui {
 class SpeakingMenu;
@@ -13,7 +14,7 @@ class SpeakingMenu : public QWidget
     Q_OBJECT
 
 public:
-    explicit SpeakingMenu(QAudioInput *audioSender, QString username, QWidget *parent = nullptr);
+    explicit SpeakingMenu(QAudioInput *audioSender, QString username, Client* client, QWidget *parent = nullptr);
     ~SpeakingMenu();
 
 signals:
@@ -27,7 +28,7 @@ private slots:
 private:
     Ui::SpeakingMenu *ui;
     QAudioInput* audioSender;
-
+    Client* client;
     bool isMicroOn;
 };
 

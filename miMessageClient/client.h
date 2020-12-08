@@ -47,7 +47,7 @@ private:
     int serverPort;
 
     QAudioFormat inputOutputFormat;
-
+    int audioBufferSize;
 signals:
     void Registered(bool isRegistered);
     void Logined(bool isLogined, QJsonObject received);
@@ -58,7 +58,7 @@ signals:
     void incomeCalling(QString from);
     void callingDeclined();
     void callingAccepted();
-
+    void callingEnd();
 public slots:
     void bindAudioFromMicro();
     void bindAudioFromSocket();
