@@ -61,6 +61,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this->client->serverConnection, &QTcpSocket::disconnected, [=](){
         this->on_QuitButton_clicked();
         ui->logInfoLabel->setText("Lost connection with server");
+
+        if(this->callingMenu != nullptr && this->callingMenu->isVisible())
+            this->callingMenu->close();
+
+        if(this->settingsMenu != nullptr && this->settingsMenu->isVisible())
+            this->settingsMenu->close();
+
+        if(this->speakingMenu != nullptr && this->speakingMenu->isVisible())
+            this->speakingMenu->close();
     });
 }
 
