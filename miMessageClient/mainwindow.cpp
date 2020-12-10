@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
     connect(client, &Client::callingEnd, [=](){
         this->client->audioConnection->disconnectFromHost();
+        this->client->stopAudio();
         this->speakingMenu->close();
     });
 

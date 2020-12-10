@@ -28,6 +28,10 @@ SpeakingMenu::SpeakingMenu(QAudioInput *audioSender, QString username, Client* c
 
     ui->endCall->setStyleSheet("background: tomato;"
                                "color: #FFF;");
+
+    connect(ui->endCall, &QPushButton::clicked, this, &SpeakingMenu::on_endCall_clicked);
+
+    ui->soundVolume->setSliderPosition(100);
 }
 
 SpeakingMenu::~SpeakingMenu()
@@ -59,7 +63,7 @@ void SpeakingMenu::on_microModeButton_clicked()
     }
 }
 
-void SpeakingMenu::on_soundVolume_actionTriggered(int action)
+void SpeakingMenu::on_soundVolume_valueChanged(int value)
 {
-    this->audioSender->setVolume(action);
+    this->audioSender->setVolume(value);
 }

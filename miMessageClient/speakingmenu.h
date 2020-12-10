@@ -22,9 +22,8 @@ signals:
     void endCall();
 
 private slots:
-
-    void on_microModeButton_clicked();
-    void on_soundVolume_actionTriggered(int action);
+    void on_microModeButton_clicked();    
+    void on_soundVolume_valueChanged(int value);
 
 private:
     Ui::SpeakingMenu *ui;
