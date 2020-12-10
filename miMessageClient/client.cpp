@@ -35,6 +35,11 @@ Client::Client(QObject *parent) : QObject(parent)
 
 }
 
+void Client::tryConnectToserver()
+{
+    this->serverConnection->connectToHost(this->serverAddress, this->serverPort);
+}
+
 void Client::registerUser(QString username, QString password)
 {
     QJsonObject toSend;

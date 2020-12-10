@@ -17,6 +17,8 @@ class Client : public QObject
     Q_OBJECT
 public:
     explicit Client(QObject *parent = nullptr);
+    void tryConnectToserver();
+
     void registerUser(QString username, QString password);
     void loginUser(QString username, QString password);
     void addNewChatGroup(QString chatOrGroupName, QString chatOrGroup);
@@ -37,12 +39,11 @@ public:
     QString speakingWith;
 
     QTcpSocket *audioConnection;
+    QSslSocket *serverConnection;
 
     QAudioInput *audioInput;
     QAudioOutput *audioOutput;
 private:
-    QSslSocket *serverConnection;
-
     QHostAddress serverAddress;
     int serverPort;
 

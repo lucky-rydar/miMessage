@@ -57,6 +57,11 @@ MainWindow::MainWindow(QWidget *parent)
         this->client->audioConnection->disconnectFromHost();
         this->speakingMenu->close();
     });
+
+    connect(this->client->serverConnection, &QTcpSocket::disconnected, [=](){
+        this->on_QuitButton_clicked();
+        ui->logInfoLabel->setText("Lost connection with server");
+    });
 }
 
 MainWindow::~MainWindow()
@@ -143,26 +148,35 @@ void MainWindow::on_RegisterUserButton_clicked()
 
 void MainWindow::on_LoginUserButton_clicked()
 {
-    if(ui->logUsername->text().isEmpty() || ui->logPassword->text().isEmpty())
+    if(client->serverConnection->state() == QAbstractSocket::ConnectedState)
     {
-        ui->logInfoLabel->setText("Username or password line is empty.");
-        QPalette palette = ui->logInfoLabel->palette();
-        palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
-        ui->logInfoLabel->setPalette(palette);
+        if(ui->logUsername->text().isEmpty() || ui->logPassword->text().isEmpty())
+        {
+            ui->logInfoLabel->setText("Username or password line is empty.");
+            QPalette palette = ui->logInfoLabel->palette();
+            palette.setColor(ui->logInfoLabel->foregroundRole(), Qt::red);
+            ui->logInfoLabel->setPalette(palette);
+        }
+        else
+        {
+            client->loginUser(ui->logUsername->text(), ui->logPassword->text());
+
+            client->username = ui->logUsername->text();
+            client->password = ui->logPassword->text();
+
+            QPalette palette = ui->logInfoLabel->palette();
+            ui->logInfoLabel->setText("Trying to login you");
+            palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
+            ui->logInfoLabel->setPalette(palette);
+
+            connect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
+        }
     }
-    else
+    else if(client->serverConnection->state() == QAbstractSocket::UnconnectedState)
     {
-        client->loginUser(ui->logUsername->text(), ui->logPassword->text());
-
-        client->username = ui->logUsername->text();
-        client->password = ui->logPassword->text();
-
-        QPalette palette = ui->logInfoLabel->palette();
-        ui->logInfoLabel->setText("Trying to login you");
-        palette.setColor(ui->logInfoLabel->foregroundRole(), QColor(0, 200, 0));
-        ui->logInfoLabel->setPalette(palette);
-
-        connect(client, &Client::Logined, this, &MainWindow::onLoginedUser);
+        ui->logInfoLabel->setText("Trying to connect to server...");
+        this->client->tryConnectToserver();
+        connect(client->serverConnection, &QTcpSocket::connected, this, &MainWindow::onConnectedAndTryingToLogin);
     }
 }
 
@@ -302,6 +316,12 @@ void MainWindow::onIncomeCalling(QString from)
 {
     callingMenu->setCallingUser(from);
     callingMenu->show();
+}
+
+void MainWindow::onConnectedAndTryingToLogin()
+{
+    this->on_LoginUserButton_clicked();
+    disconnect(client->serverConnection, &QTcpSocket::connected, this, &MainWindow::onConnectedAndTryingToLogin);
 }
 
 void MainWindow::UploadChat(QString chatName)
