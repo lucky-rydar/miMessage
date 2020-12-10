@@ -62,14 +62,17 @@ MainWindow::MainWindow(QWidget *parent)
         this->on_QuitButton_clicked();
         ui->logInfoLabel->setText("Lost connection with server");
 
+        client->stopAudio();
+        this->speakingMenu->on_endCall_clicked();
+
         if(this->callingMenu != nullptr && this->callingMenu->isVisible())
             this->callingMenu->close();
-
+        client->stopAudio();
         if(this->settingsMenu != nullptr && this->settingsMenu->isVisible())
             this->settingsMenu->close();
 
-        if(this->speakingMenu != nullptr && this->speakingMenu->isVisible())
-            this->speakingMenu->close();
+        if(this->chatForm != nullptr && this->chatForm->isVisible())
+            this->chatForm->close();
     });
 }
 

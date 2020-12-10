@@ -17,11 +17,12 @@ public:
     explicit SpeakingMenu(QAudioInput *audioSender, QString username, Client* client, QWidget *parent = nullptr);
     ~SpeakingMenu();
 
+    void on_endCall_clicked();
 signals:
     void endCall();
 
 private slots:
-    void on_endCall_clicked();
+
     void on_microModeButton_clicked();
     void on_soundVolume_actionTriggered(int action);
 
